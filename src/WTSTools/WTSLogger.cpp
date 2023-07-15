@@ -435,7 +435,7 @@ SpdLoggerPtr WTSLogger::getLogger(const char* logger, const char* pattern /* = "
 	SpdLoggerPtr ret = spdlog::get(logger);
 	if (ret == NULL && strlen(pattern) > 0)
 	{
-		//当成动态的日志来处理
+		//碌卤鲁脡露炉脤卢碌脛脠脮脰戮脌麓麓娄脌铆
 		if (m_mapPatterns == NULL)
 			return SpdLoggerPtr();
 

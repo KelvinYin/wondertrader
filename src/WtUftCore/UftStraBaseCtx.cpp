@@ -89,7 +89,7 @@ bool UftStraBaseCtx::stra_cancel(uint32_t localid)
 
 OrderIDs UftStraBaseCtx::stra_cancel_all(const char* stdCode)
 {
-	//³·µ¥ÆµÂÊ¼ì²é
+	//æ’¤å•é¢‘çŽ‡æ£€æŸ¥
 	//if (!_trader->checkCancelLimits(stdCode))
 	//	return OrderIDs();
 

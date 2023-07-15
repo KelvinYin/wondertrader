@@ -14,7 +14,7 @@ TEST(test_lmdb, test_constructor)
 TEST(test_lmdb, test_query)
 {
 	{	
-		//д��ѯ
+		//Ð´²éÑ¯
 		WtLMDB db(false);
 		EXPECT_TRUE(db.open("./testdb"));
 
@@ -32,7 +32,7 @@ TEST(test_lmdb, test_query)
 	}
 
 	{
-		//����ѯ
+		//¶Á²éÑ¯
 		WtLMDB db(true);
 		EXPECT_TRUE(db.open("./testdb"));
 
@@ -84,7 +84,7 @@ std::string makeData(uint32_t v, bool trans)
 TEST(test_lmdb, test_endian)
 {
 	{
-		//д��ѯ
+		//Ð´²éÑ¯
 		WtLMDB db(false);
 		EXPECT_TRUE(db.open("./endiandb"));
 
@@ -103,7 +103,7 @@ TEST(test_lmdb, test_endian)
 	}
 
 	{
-		//����ѯ
+		//¶Á²éÑ¯
 		WtLMDB db(true);
 		EXPECT_TRUE(db.open("./endiandb"));
 

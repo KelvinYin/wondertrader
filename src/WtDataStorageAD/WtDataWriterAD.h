@@ -39,14 +39,14 @@ public:
 private:
 	IBaseDataMgr*		_bd_mgr;
 
-	//Tick缓存
+	//Tick缂撳瓨
 	StdUniqueMutex	_mtx_tick_cache;
 	std::string		_cache_file_tick;
 	faster_hashmap<std::string, uint32_t> _tick_cache_idx;
 	BoostMFPtr		_tick_cache_file;
 	RTTickCache*	_tick_cache_block;
 
-	//m1缓存
+	//m1缂撳瓨
 	typedef struct _RTBarCacheWrapper
 	{
 		StdUniqueMutex	_mtx;
@@ -84,9 +84,9 @@ private:
 private:
 	//////////////////////////////////////////////////////////////////////////
 	/*
-	 *	这里放LMDB的数据库定义
-	 *	K线数据，按照每个市场m1/m5/d1三个周期一共三个数据库，路径如./m1/CFFEX
-	 *	Tick数据，每个合约一个数据库，路径如./ticks/CFFEX/IF2101
+	 *	杩欓噷鏀綥MDB鐨勬暟鎹簱瀹氫箟
+	 *	K绾挎暟鎹紝鎸夌収姣忎釜甯傚満m1/m5/d1涓変釜鍛ㄦ湡涓�鍏变笁涓暟鎹簱锛岃矾寰勫./m1/CFFEX
+	 *	Tick鏁版嵁锛屾瘡涓悎绾︿竴涓暟鎹簱锛岃矾寰勫./ticks/CFFEX/IF2101
 	 */
 	typedef std::shared_ptr<WtLMDB> WtLMDBPtr;
 	typedef faster_hashmap<std::string, WtLMDBPtr> WtLMDBMap;
@@ -95,7 +95,7 @@ private:
 	WtLMDBMap	_exchg_m5_dbs;
 	WtLMDBMap	_exchg_d1_dbs;
 
-	//用exchg.code作为key，如BINANCE.BTCUSDT
+	//鐢╡xchg.code浣滀负key锛屽BINANCE.BTCUSDT
 	WtLMDBMap	_tick_dbs;
 
 	WtLMDBPtr	get_k_db(const char* exchg, WTSKlinePeriod period);

@@ -29,7 +29,7 @@ namespace uft
 
 	public:
 		/*
-		 *	³õÊ¼»¯
+		 *	åˆå§‹åŒ–
 		 */
 		bool init();
 

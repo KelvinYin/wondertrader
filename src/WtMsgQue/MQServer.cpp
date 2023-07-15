@@ -123,11 +123,11 @@ void MQServer::publish(const char* topic, const void* data, uint32_t dataLen)
 					StdUniqueLock lock(m_mtxCast);
 					m_bTimeout = true;
 					m_condCast.wait_for(lock, std::chrono::seconds(60));
-					//如果有新的数据进来，timeout会被改为false
-					//如果没有新的数据进来，timeout会保持为true
+					//濡傛灉鏈夋柊鐨勬暟鎹繘鏉ワ紝timeout浼氳鏀逛负false
+					//濡傛灉娌℃湁鏂扮殑鏁版嵁杩涙潵锛宼imeout浼氫繚鎸佷负true
 					if (m_bTimeout)
 					{
-						//等待超时以后，广播心跳包
+						//绛夊緟瓒呮椂浠ュ悗锛屽箍鎾績璺冲寘
 						m_dataQue.push(PubData("HEARTBEAT", "", 0));
 					}
 					else

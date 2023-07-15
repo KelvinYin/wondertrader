@@ -10,7 +10,7 @@ void on_get_bar(WTSBarStruct* bar, WtUInt32 count, bool isLast)
 
 void on_bar_cnt(WtUInt32 dataCnt)
 {
-	printf("¹²%uÌõKÏß\r\n", dataCnt);
+	printf("å…±%uæ¡Kçº¿\r\n", dataCnt);
 }
 
 void on_log(const char* message)
@@ -22,7 +22,7 @@ void on_log(const char* message)
 void testDtHelper()
 {
 	const char* session_str = "{\
-		\"name\":\"¹ÉÆ±°×ÅÌ0930\",\
+		\"name\":\"è‚¡ç¥¨ç™½ç›˜0930\",\
 		\"offset\" : 0,\
 		\"auction\" : {\
 			\"from\": 929,\

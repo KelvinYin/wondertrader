@@ -64,7 +64,7 @@ private:
 		if (_cache._file == NULL)
 			return false;
 
-		//µ÷ÓÃ¸Ãº¯ÊýÖ®Ç°,Ó¦¸Ã±£Ö¤Ïß³Ì°²È«ÁË
+		//è°ƒç”¨è¯¥å‡½æ•°ä¹‹å‰,åº”è¯¥ä¿è¯çº¿ç¨‹å®‰å…¨äº†
 		CacheBlock* cBlock = _cache._block;
 		if (cBlock->_capacity >= newCap)
 			return _cache._file->addr();
@@ -156,7 +156,7 @@ public:
 		}
 		else
 		{
-			//¼ì²é»º´æÎÄ¼þÊÇ·ñÓÐÎÊÌâ,Òª×Ô¶¯»Ö¸´
+			//æ£€æŸ¥ç¼“å­˜æ–‡ä»¶æ˜¯å¦æœ‰é—®é¢˜,è¦è‡ªåŠ¨æ¢å¤
 			do
 			{
 				uint64_t uSize = sizeof(CacheBlock) + sizeof(CacheItem) *  _cache._block->_capacity;
@@ -165,8 +165,8 @@ public:
 				{
 					uint32_t realCap = (uint32_t)((realSz - sizeof(CacheBlock)) / sizeof(CacheItem));
 					uint32_t markedCap =  _cache._block->_capacity;
-					//ÎÄ¼þ´óÐ¡²»Æ¥Åä,Ò»°ãÊÇÒòÎªcapacity¸ÄÁË,µ«ÊÇÊµ¼ÊÃ»À©ÈÝ
-					//ÕâÊÇ×öÒ»´ÎÀ©ÈÝ¼´¿É
+					//æ–‡ä»¶å¤§å°ä¸åŒ¹é…,ä¸€èˆ¬æ˜¯å› ä¸ºcapacityæ”¹äº†,ä½†æ˜¯å®žé™…æ²¡æ‰©å®¹
+					//è¿™æ˜¯åšä¸€æ¬¡æ‰©å®¹å³å¯
 					 _cache._block->_capacity = realCap;
 					 _cache._block->_size = (realCap < markedCap) ? realCap : markedCap;
 				}
@@ -174,7 +174,7 @@ public:
 			} while (false);
 		}
 
-		//ÕâÀï°ÑË÷Òý¼Óµ½hashmapÖÐ
+		//è¿™é‡ŒæŠŠç´¢å¼•åŠ åˆ°hashmapä¸­
 		for (uint32_t i = 0; i < _cache._block->_size; i++)
 			_indice[_cache._block->_items[i]._key] = i;
 

@@ -57,7 +57,7 @@ TEST(test_kvcache, test_perform)
 	TimeUtils::Ticker ticker;
 	char buffer[16] = { 0 };
 
-	//ÏÈ²âÊÔsimplecache
+	//å…ˆæµ‹è¯•simplecache
 	for(uint32_t i = 0; i < times; i++)
 	{
 		char* s = fmt::format_to(buffer, "{}", i);
@@ -73,7 +73,7 @@ TEST(test_kvcache, test_perform)
 	}
 	uint64_t a = ticker.nano_seconds();
 
-	//ÔÙ²âÊÔini
+	//å†æµ‹è¯•ini
 	ticker.reset();
 	for (uint32_t i = 0; i < times; i++)
 	{

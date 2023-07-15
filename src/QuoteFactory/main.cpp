@@ -61,7 +61,7 @@ const char* getBinDir()
 
 void initDataMgr(WTSVariant* config, bool bAlldayMode = false)
 {
-	//如果是全天模式，则不传递状态机给DataManager
+	//濡傛灉鏄叏澶╂ā寮忥紝鍒欎笉浼犻�掔姸鎬佹満缁橠ataManager
 	g_dataMgr.init(config, &g_baseDataMgr, bAlldayMode ? NULL : &g_stateMon, &g_udpCaster);
 }
 
@@ -75,7 +75,7 @@ void initParsers(WTSVariant* cfg)
 
 		const char* id = cfgItem->getCString("id");
 		// By Wesley @ 2021.12.14
-		// 如果id为空，则生成自动id
+		// 濡傛灉id涓虹┖锛屽垯鐢熸垚鑷姩id
 		std::string realid = id;
 		if (realid.empty())
 		{
@@ -110,7 +110,7 @@ void initialize()
 		return;
 	}
 
-	//加载市场信息
+	//鍔犺浇甯傚満淇℃伅
 	WTSVariant* cfgBF = config->get("basefiles");
 	if (cfgBF->get("session"))
 	{
@@ -181,7 +181,7 @@ void initialize()
 	g_udpCaster.init(config->get("broadcaster"), &g_baseDataMgr, &g_dataMgr);
 
 	//By Wesley @ 2021.12.27
-	//全天候模式，不需要再使用状态机
+	//鍏ㄥぉ鍊欐ā寮忥紝涓嶉渶瑕佸啀浣跨敤鐘舵�佹満
 	bool bAlldayMode = config->getBoolean("allday");
 	if (!bAlldayMode)
 	{
@@ -195,7 +195,7 @@ void initialize()
 
 	if(config->has("index"))
 	{
-		//如果存在指数模块要，配置指数
+		//濡傛灉瀛樺湪鎸囨暟妯″潡瑕侊紝閰嶇疆鎸囨暟
 		const char* filename = config->getCString("index");
 		WTSLogger::info("Reading index config from {}...", filename);
 		WTSVariant* var = WTSCfgLoader::load_from_file(filename);
@@ -246,7 +246,7 @@ void initialize()
 	g_asyncIO.post([bAlldayMode](){
 		g_parsers.run();
 
-		//全天候模式，不启动状态机
+		//鍏ㄥぉ鍊欐ā寮忥紝涓嶅惎鍔ㄧ姸鎬佹満
 		if(!bAlldayMode)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(5));

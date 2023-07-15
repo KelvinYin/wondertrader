@@ -11,7 +11,7 @@ NS_WTP_BEGIN
 #pragma warning(disable:4200)
 
 #pragma pack(push,1)
-//UDPÇëÇó°ü
+//UDPè¯·æ±‚åŒ…
 typedef struct _MQPacket
 {
 	char			_topic[32];

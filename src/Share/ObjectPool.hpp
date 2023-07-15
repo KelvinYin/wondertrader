@@ -27,7 +27,7 @@ public:
 		_pool.free(pobj);
 	}
 
-	//手动释放未使用的内存
+	//鎵嬪姩閲婃斁鏈娇鐢ㄧ殑鍐呭瓨
 	void release()
 	{
 		_pool.release_memory();
