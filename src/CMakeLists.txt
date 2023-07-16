@@ -55,67 +55,53 @@ ENDIF()
 ADD_SUBDIRECTORY(WTSUtils)
 ADD_SUBDIRECTORY(WTSTools)
 
-#contract Loade through ctp channel
-ADD_SUBDIRECTORY(CTPLoader)
-ADD_SUBDIRECTORY(CTPOptLoader)
-ADD_SUBDIRECTORY(MiniLoader)
-ADD_SUBDIRECTORY(LoaderRunner)
+# #contract Load through ctp channel
+# ADD_SUBDIRECTORY(CTPLoader)
+# ADD_SUBDIRECTORY(CTPOptLoader)
+# ADD_SUBDIRECTORY(MiniLoader)
+# ADD_SUBDIRECTORY(LoaderRunner)
 
-#parser for quote date from ctp channel
-ADD_SUBDIRECTORY(ParserCTP)
-ADD_SUBDIRECTORY(ParserCTPMini)
-ADD_SUBDIRECTORY(ParserCTPOpt)
-ADD_SUBDIRECTORY(ParserFemas)
-ADD_SUBDIRECTORY(ParserXTP)
-ADD_SUBDIRECTORY(ParserXeleSkt)
+# #parser for quote date from ctp channel
 ADD_SUBDIRECTORY(WtDataStorage)
 ADD_SUBDIRECTORY(WtDataStorageAD)
-ADD_SUBDIRECTORY(WtDtCore)
-ADD_SUBDIRECTORY(WtDtHelper)
-ADD_SUBDIRECTORY(WtDtPorter)
-ADD_SUBDIRECTORY(WtDtServo)
-#quote date processor
-ADD_SUBDIRECTORY(QuoteFactory)
+# ADD_SUBDIRECTORY(WtDtCore)
+# ADD_SUBDIRECTORY(WtDtHelper)
+# ADD_SUBDIRECTORY(WtDtPorter)
+# ADD_SUBDIRECTORY(WtDtServo)
+# #quote date processor
+# ADD_SUBDIRECTORY(QuoteFactory)
 
-#back test core library
-ADD_SUBDIRECTORY(WtBtCore)
-#back test c porter for outter libraries
-ADD_SUBDIRECTORY(WtBtPorter)
-ADD_SUBDIRECTORY(WtBtRunner)
+# #back test core library
+# ADD_SUBDIRECTORY(WtBtCore)
+# #back test c porter for outter libraries
+# ADD_SUBDIRECTORY(WtBtPorter)
+# ADD_SUBDIRECTORY(WtBtRunner)
 
-ADD_SUBDIRECTORY(ParserUDP)
-ADD_SUBDIRECTORY(TraderCTP)
-ADD_SUBDIRECTORY(TraderCTPMini)
-ADD_SUBDIRECTORY(TraderCTPOpt)
-ADD_SUBDIRECTORY(TraderFemas)
-ADD_SUBDIRECTORY(TraderMocker)
-ADD_SUBDIRECTORY(TraderXTP)
-ADD_SUBDIRECTORY(TraderYD)
-ADD_SUBDIRECTORY(WtExeFact)
-ADD_SUBDIRECTORY(WtRiskMonFact)
+# ADD_SUBDIRECTORY(ParserUDP)
+# ADD_SUBDIRECTORY(WtExeFact)
+# ADD_SUBDIRECTORY(WtRiskMonFact)
 
 ADD_SUBDIRECTORY(WtMsgQue)
 ADD_SUBDIRECTORY(WtCore)
 ADD_SUBDIRECTORY(WtPorter)
-ADD_SUBDIRECTORY(WtExecMon)
-ADD_SUBDIRECTORY(WtRunner)
+# ADD_SUBDIRECTORY(WtExecMon)
+# ADD_SUBDIRECTORY(WtRunner)
 
-ADD_SUBDIRECTORY(TraderDumper)
+# ADD_SUBDIRECTORY(TraderDumper)
 
-#uft
-ADD_SUBDIRECTORY(WtUftCore)
-ADD_SUBDIRECTORY(WtUftStraFact)
-ADD_SUBDIRECTORY(WtUftRunner)
+# #uft
+# ADD_SUBDIRECTORY(WtUftCore)
+# ADD_SUBDIRECTORY(WtUftStraFact)
+# ADD_SUBDIRECTORY(WtUftRunner)
 
-ADD_SUBDIRECTORY(WtLatencyHFT)
-ADD_SUBDIRECTORY(WtLatencyUFT)
+# ADD_SUBDIRECTORY(WtLatencyHFT)
+# ADD_SUBDIRECTORY(WtLatencyUFT)
 
-#test projects
-ADD_SUBDIRECTORY(TestBtPorter)
-ADD_SUBDIRECTORY(TestDtPorter)
-ADD_SUBDIRECTORY(TestExecPorter)
-ADD_SUBDIRECTORY(TestPorter)
-ADD_SUBDIRECTORY(TestTrader)
-ADD_SUBDIRECTORY(TestParser)
-ADD_SUBDIRECTORY(TestUnits)
-
+# #test projects
+# ADD_SUBDIRECTORY(TestBtPorter)
+# ADD_SUBDIRECTORY(TestDtPorter)
+# ADD_SUBDIRECTORY(TestExecPorter)
+# ADD_SUBDIRECTORY(TestPorter)
+# ADD_SUBDIRECTORY(TestTrader)
+# ADD_SUBDIRECTORY(TestParser)
+# ADD_SUBDIRECTORY(TestUnits)

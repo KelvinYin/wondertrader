@@ -4,7 +4,7 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
+ *
  * \brief 时间处理的封装
  */
 #pragma once
@@ -49,17 +49,10 @@ struct KUSER_SHARED_DATA
 #define TICKSPERSEC        10000000L
 #endif
 
-class TimeUtils 
+class TimeUtils
 {
-	
-public:
-	static inline int64_t getLocalTimeNowOld(void)
-	{
-		thread_local static timeb now;
-		ftime(&now);
-		return now.time * 1000 + now.millitm;
-	}
 
+public:
 	/*
 	 *	获取本地时间，精确到毫秒
 	 */
@@ -131,7 +124,7 @@ public:
 		tm * tNow = localtime(&now);
 
 		date = (tNow->tm_year+1900)*10000 + (tNow->tm_mon+1)*100 + tNow->tm_mday;
-		
+
 		time = tNow->tm_hour*10000 + tNow->tm_min*100 + tNow->tm_sec;
 		time *= 1000;
 		time += millitm;
@@ -159,7 +152,7 @@ public:
 		}
 		else
 		{
-			tm t;	
+			tm t;
 			memset(&t,0,sizeof(tm));
 			t.tm_year = uDate/10000 - 1900;
 			t.tm_mon = (uDate%10000)/100 - 1;
@@ -168,7 +161,7 @@ public:
 		}
 
 		tm * tNow = localtime(&ts);
-	
+
 		return tNow->tm_wday;
 	}
 
@@ -212,7 +205,7 @@ public:
 	 */
 	static inline int64_t makeTime(long lDate, long lTimeWithMs, bool isToUTC = false)
 	{
-		tm t;	
+		tm t;
 		memset(&t,0,sizeof(tm));
 		t.tm_year = lDate/10000 - 1900;
 		t.tm_mon = (lDate%10000)/100 - 1;
@@ -221,7 +214,7 @@ public:
 		t.tm_min = (lTimeWithMs%10000000)/100000;
 		t.tm_sec = (lTimeWithMs%100000)/1000;
 		int millisec = lTimeWithMs%1000;
-		//t.tm_isdst 	
+		//t.tm_isdst
 		time_t ts = mktime(&t);
 		//如果要转成UTC时间，则需要根据时区进行转换
 		if (isToUTC)
@@ -247,7 +240,7 @@ public:
 		if (msec > 0) //是否有毫秒
 		   sprintf(tm_buf,"%4d%02d%02d%02d%02d%02d.%03d",t.tm_year+1900, t.tm_mon+1, t.tm_mday,
 			t.tm_hour, t.tm_min, t.tm_sec, msec);
-		else 
+		else
 		   sprintf(tm_buf,"%4d%02d%02d%02d%02d%02d",t.tm_year+1900, t.tm_mon+1, t.tm_mday,
 			t.tm_hour, t.tm_min, t.tm_sec);
 		return tm_buf;
@@ -255,12 +248,12 @@ public:
 
 	static uint32_t getNextDate(uint32_t curDate, int days = 1)
 	{
-		tm t;	
+		tm t;
 		memset(&t,0,sizeof(tm));
 		t.tm_year = curDate/10000 - 1900;
 		t.tm_mon = (curDate%10000)/100 - 1;
 		t.tm_mday = curDate % 100;
-		//t.tm_isdst 	
+		//t.tm_isdst
 		time_t ts = mktime(&t);
 		ts += days*86400;
 
@@ -325,7 +318,7 @@ public:
 
 	static inline bool isWeekends(uint32_t uDate)
 	{
-		tm t;	
+		tm t;
 		memset(&t,0,sizeof(tm));
 		t.tm_year = uDate/1/10000 - 1900;
 		t.tm_mon = (uDate/1%10000)/100 - 1;
@@ -335,7 +328,7 @@ public:
 		tm* tmt = localtime(&tt);
 		if(tmt == NULL)
 			return true;
-	
+
 		if(tmt->tm_wday == 0 || tmt->tm_wday==6)
 			return true;
 
@@ -422,7 +415,7 @@ public:
 			_tick = std::chrono::high_resolution_clock::now();
 		}
 
-		inline int64_t seconds() const 
+		inline int64_t seconds() const
 		{
 			auto now = std::chrono::high_resolution_clock::now();
 			auto td = now - _tick;
