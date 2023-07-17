@@ -5,7 +5,7 @@
  * \author Wesley
  * \date 2020/03/30
  * 
- * \brief 数据统计辅助类
+ * \brief 脢媒戮脻脥鲁录脝赂篓脰煤脌脿
  */
 #pragma once
 #include <boost/atomic.hpp>

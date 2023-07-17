@@ -156,7 +156,7 @@ IBaseDataMgr* DataManager::getBDMgr()
 bool DataManager::canSessionReceive(const char* sid)
 {
 	//By Wesley @ 2021.12.27
-	//如果状态机为NULL，说明是全天候模式，直接返回true即可
+	//濡傛灉鐘舵�佹満涓篘ULL锛岃鏄庢槸鍏ㄥぉ鍊欐ā寮忥紝鐩存帴杩斿洖true鍗冲彲
 	if (_state_mon == NULL)
 		return true;
 

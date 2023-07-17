@@ -37,7 +37,7 @@ extern "C"
 };
 
 /*
- *	´¦Àí¿éÊı¾İ
+ *	å¤„ç†å—æ•°æ®
  */
 extern bool proc_block_data(std::string& content, bool isBar, bool bKeepHead);
 

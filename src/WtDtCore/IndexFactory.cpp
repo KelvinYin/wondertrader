@@ -60,7 +60,7 @@ void IndexFactory::handle_quote(WTSTickData* newTick)
 			{
 				worker->handle_quote(newTick);
 			}
-			//ÕâÀï¼ÓÒ»¸ö´¦Àí
+			//è¿™é‡ŒåŠ ä¸€ä¸ªå¤„ç†
 			newTick->release();
 		});
 	}
