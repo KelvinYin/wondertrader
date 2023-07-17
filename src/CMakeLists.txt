@@ -54,6 +54,7 @@ ENDIF()
 #basic libraries
 ADD_SUBDIRECTORY(WTSUtils)
 ADD_SUBDIRECTORY(WTSTools)
+ADD_SUBDIRECTORY(API)
 
 # #contract Load through ctp channel
 ADD_SUBDIRECTORY(LoaderRunner)
