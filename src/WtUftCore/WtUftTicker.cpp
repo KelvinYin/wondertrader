@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #include "WtUftTicker.h"
 #include "WtUftEngine.h"
@@ -38,8 +38,6 @@ WtUftRtTicker::~WtUftRtTicker()
 
 void WtUftRtTicker::init(const char* sessionID)
 {
-	_s_info = _engine->get_session_info(sessionID);
-
 	TimeUtils::getDateTime(_date, _time);
 }
 
@@ -68,22 +66,14 @@ void WtUftRtTicker::on_tick(WTSTickData* curTick)
 
 	uint32_t curMin = _time / 100000;
 	uint32_t curSec = _time % 100000;
-	uint32_t minutes = _s_info->timeToMinutes(curMin);
-	bool isSecEnd = _s_info->isLastOfSection(curMin);
-	if (isSecEnd)
-	{
-		minutes--;
-	}
-	minutes++;
 	uint32_t rawMin = curMin;
-	curMin = _s_info->minuteToTime(minutes);
 
 	if (_cur_pos == 0)
 	{
 		//如果当前时间是0, 则直接赋值即可
-		_cur_pos = minutes;
+		_cur_pos = curMin;
 	}
-	else if (_cur_pos < minutes)
+	else if (_cur_pos < curMin)
 	{
 		//如果已记录的分钟小于新的分钟, 则需要触发闭合事件
 		//这个时候要先触发闭合, 再修改平台时间和价格
@@ -95,12 +85,10 @@ void WtUftRtTicker::on_tick(WTSTickData* curTick)
 			//优先修改时间标记
 			_last_emit_pos = _cur_pos;
 
-			uint32_t thisMin = _s_info->minuteToTime(_cur_pos);
-
-			WTSLogger::info("Minute Bar {}.{:04d} Closed by data", _date, thisMin);
-			_engine->on_minute_end(_date, thisMin);
+			WTSLogger::info("Minute Bar {}.{:04d} Closed by data", _date, _cur_pos);
+			_engine->on_minute_end(_date, _cur_pos);
 		}
-			
+
 		if (_engine)
 		{
 			_engine->on_tick(curTick->code(), curTick);
@@ -108,7 +96,7 @@ void WtUftRtTicker::on_tick(WTSTickData* curTick)
 			_engine->set_trading_date(curTick->tradingdate());
 		}
 
-		_cur_pos = minutes;
+		_cur_pos = curMin;
 	}
 	else
 	{
@@ -133,18 +121,13 @@ void WtUftRtTicker::run()
 
 	_engine->on_init();
 
-	uint32_t curTDate = _engine->get_basedata_mgr()->calcTradingDate(_s_info->id(), _engine->get_date(), _engine->get_min_time(), true);
-	_engine->set_trading_date(curTDate);
-
-	_engine->on_session_begin();
-
 	//先检查当前时间, 如果大于
-	uint32_t offTime = _s_info->offsetTime(_engine->get_min_time(), true);
+	uint32_t offTime = _engine->get_min_time();
 
 	_thrd.reset(new StdThread([this, offTime](){
 		while (!_stopped)
 		{
-			if (_time != UINT_MAX && _s_info->isInTradingTime(_time / 100000, true))
+			if (_time != UINT_MAX)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				uint64_t now = TimeUtils::getLocalTimeNow();
@@ -156,14 +139,12 @@ void WtUftRtTicker::run()
 
 					//优先修改时间标记
 					_last_emit_pos = _cur_pos;
-
-					uint32_t thisMin = _s_info->minuteToTime(_cur_pos);
-					_time = thisMin;
+					_time = _cur_pos;
 
 					//如果thisMin是0, 说明换日了
 					//这里是本地计时导致的换日, 说明日期其实还是老日期, 要自动+1
 					//同时因为时间是235959xxx, 所以也要手动置为0
-					if (thisMin == 0)
+					if (_time == 0)
 					{
 						uint32_t lastDate = _date;
 						_date = TimeUtils::getNextDate(_date);
@@ -171,30 +152,17 @@ void WtUftRtTicker::run()
 						WTSLogger::info("Data automatically changed at time 00:00: {} -> {}", lastDate, _date);
 					}
 
-					WTSLogger::info("Minute bar {}.{:04d} closed automatically", _date, thisMin);
+					WTSLogger::info("Minute bar {}.{:04d} closed automatically", _date, _cur_pos);
 					//if (_store)
 					//	_store->onMinuteEnd(_date, thisMin);
 
-					_engine->on_minute_end(_date, thisMin);
-
-					uint32_t offMin = _s_info->offsetTime(thisMin, true);
-					if (offMin >= _s_info->getCloseTime(true))
-					{
-						_engine->on_session_end();
-					}
+					_engine->on_minute_end(_date, _cur_pos);
 
 					//145959000
 					if (_engine)
-						_engine->set_date_time(_date, thisMin, 0);
+						_engine->set_date_time(_date, _cur_pos, 0);
 				}
 			}
-			else //if (offTime >= _s_info->getOpenTime(true) && offTime <= _s_info->getCloseTime(true))
-			{
-				//不在交易时间，则休息10s再进行检查
-				//因为这个逻辑是处理分钟线的，所以休盘时间休息10s，不会引起数据踏空的问题
-				std::this_thread::sleep_for(std::chrono::seconds(10));
-			}
-			
 		}
 	}));
 }

@@ -4,7 +4,7 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
+ *
  * \brief Wt品种信息、合约信息定义文件
  */
 #pragma once
@@ -120,21 +120,14 @@ private:
 class WTSContractInfo :	public WTSObject
 {
 public:
-	static WTSContractInfo* create(const char* code, const char* name, const char* exchg, const char* pid)
+	static WTSContractInfo* create(const char* symbol, const char* exchg, const char* base, const char* quote, const char* margin)
 	{
 		WTSContractInfo* ret = new WTSContractInfo;
-		ret->m_strCode = code;
-		ret->m_strName = name;
-		ret->m_strProduct = pid;
+		ret->m_strSymbol = symbol;
 		ret->m_strExchg = exchg;
-
-		std::stringstream ss;
-		ss << exchg << "." << code;
-		ret->m_strFullCode = ss.str();
-
-		std::stringstream sss;
-		sss << exchg << "." << pid;
-		ret->m_strFullPid = sss.str();
+		ret->m_strBaseAsset = base;
+		ret->m_strQuoteAsset = quote;
+		ret->m_strMarginAsset = margin;
 
 		return ret;
 	}
@@ -155,57 +148,85 @@ public:
 		m_expireDate = expireDate;
 	}
 
-	inline void setMarginRatios(double longRatio, double shortRatio)
+	inline void setMarginRatios(double maintRatio, double requiredRatio)
 	{
-		m_lMarginRatio = longRatio;
-		m_sMarginRatio = shortRatio;
+		m_maintMarginRatio = maintRatio;
+		m_requiredMarginRatio = requiredRatio;
 	}
 
-	inline const char* getCode()	const{return m_strCode.c_str();}
-	inline const char* getExchg()	const{return m_strExchg.c_str();}
-	inline const char* getName()	const{return m_strName.c_str();}
-	inline const char* getProduct()	const{return m_strProduct.c_str();}
+	inline const char* getSymbol()	const{return m_strSymbol.c_str();}
+	inline const char* getExchg()	    const{return m_strExchg.c_str();}
+	inline const char* getBaseAsset()	const{return m_strBaseAsset.c_str();}
+	inline const char* getQuoteAsset()	const{return m_strQuoteAsset.c_str();}
+	inline const char* getMarginAsset()	const{return m_strMarginAsset.c_str();}
 
-	inline const char* getFullCode()	const{ return m_strFullCode.c_str(); }
-	inline const char* getFullPid()	const{ return m_strFullPid.c_str(); }
+	inline ContractCategory		getCategoty() const{ return m_ccCategory; }
+	inline void		setCategoty(ContractCategory cc) { m_ccCategory = cc; }
 
-	inline uint32_t	getMaxMktVol() const{ return m_maxMktQty; }
-	inline uint32_t	getMaxLmtVol() const{ return m_maxLmtQty; }
-	inline uint32_t	getMinMktVol() const { return m_minMktQty; }
-	inline uint32_t	getMinLmtVol() const { return m_minLmtQty; }
+	inline double	getMaintMarginRatio()    const { return m_maintMarginRatio; }
+	inline double	getRequiredMarginRatio() const { return m_requiredMarginRatio; }
+
+	inline double	getPriceTick()	const{ return m_dPriceTick; }
+	inline uint32_t getPrecision()  const{ return m_uPrecision; }
+
+	inline double	getLotsTick() const { return m_dLotTick; }
+	inline double	getMinLots() const { return m_dMinLots; }
+	inline double	getStepSize() const { return m_dStepSize; }
+
+	inline double	getMaxMktVol() const{ return m_maxMktQty; }
+	inline double	getMaxLmtVol() const{ return m_maxLmtQty; }
+	inline double	getMinMktVol() const { return m_minMktQty; }
+	inline double	getMinLmtVol() const { return m_minLmtQty; }
+	inline double	getMaxPrice()  const { return m_maxPrice; }
+	inline double	getMinPrice()  const { return m_minPrice; }
+	inline double	getMinNotional()  const { return m_minNotional; }
+	inline double	getMultiplierDown() const { return m_multiplierDown; }
+	inline double	getMultiplierUp() const { return m_multiplierUp; }
 
 	inline uint32_t	getOpenDate() const { return m_openDate; }
 	inline uint32_t	getExpireDate() const { return m_expireDate; }
 
-	inline double	getLongMarginRatio() const { return m_lMarginRatio; }
-	inline double	getShortMarginRatio() const { return m_sMarginRatio; }
-
-
-	inline void setCommInfo(WTSCommodityInfo* commInfo) { m_commInfo = commInfo; }
-	inline WTSCommodityInfo* getCommInfo() const { return m_commInfo; }
 
 protected:
-	WTSContractInfo():m_commInfo(NULL), m_openDate(0), m_expireDate(0), m_lMarginRatio(0), m_sMarginRatio(0) {}
+	WTSContractInfo() {}
 	virtual ~WTSContractInfo(){}
 
 private:
-	std::string	m_strCode;
+	std::string	m_strSymbol;	//交易对名称
 	std::string	m_strExchg;
-	std::string	m_strName;
-	std::string	m_strProduct;
+	std::string	m_strBaseAsset;
+	std::string	m_strQuoteAsset;
+	std::string	m_strMarginAsset;
+	ContractCategory m_ccCategory;	//合约分类，期货、股票、期权等
 
-	std::string m_strFullPid;
-	std::string m_strFullCode;
+	double		m_maintMarginRatio;		//维持保证金率
+	double		m_requiredMarginRatio;	//初始保证金率
 
-	uint32_t	m_maxMktQty;
-	uint32_t	m_maxLmtQty;
-	uint32_t	m_minMktQty;
-	uint32_t	m_minLmtQty;
+	// filters 限制参数
+	double		m_dPriceTick;	//最小价格变动单位
+	uint32_t	m_uPrecision;	//价格精度
 
-	uint32_t	m_openDate;		//上市日期
-	uint32_t	m_expireDate;	//交割日
-	double		m_lMarginRatio;	//交易所多头保证金率
-	double		m_sMarginRatio;	//交易所空头保证金率
+	double		m_dLotTick;		//数量精度
+	double		m_dMinLots;		//最小交易数量
+	double		m_dStepSize;    //数量变动步进值
+
+	double		m_maxMktQty;	//市价单最大数量
+	double		m_maxLmtQty;	//限价单最大数量
+	double		m_minMktQty;	//市价单最小数量
+	double		m_minLmtQty;	//限价单最小数量
+	double 		m_maxPrice;		//最大允许价格
+	double		m_minPrice;		//最小允许价格
+	double		m_minNotional; 	//最小名义价值
+
+	// 基于标记价格计算的挂单价格的可接受区间，挂单价格必须同时满足以下条件：
+	// 买单: price <= markPrice * multiplierUp
+	// 卖单: price >= markPrice * multiplierDown
+	double		m_multiplierDown;
+	double		m_multiplierUp;
+
+	uint32_t	m_openDate{0};		//上市日期
+	uint32_t	m_expireDate{0};	//交割日
+
 
 	WTSCommodityInfo*	m_commInfo;
 };

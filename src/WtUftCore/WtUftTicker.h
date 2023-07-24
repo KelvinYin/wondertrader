@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #pragma once
 
@@ -35,7 +35,6 @@ public:
 	void	stop();
 
 private:
-	WTSSessionInfo*	_s_info;
 	WtUftEngine*	_engine;
 
 	uint32_t	_date;

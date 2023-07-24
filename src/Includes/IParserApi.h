@@ -4,7 +4,7 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
+ *
  * \brief 行情解析模块接口定义文件
  */
 #pragma once
@@ -65,6 +65,13 @@ public:
 	 *	@transData	逐笔成交数据
 	 */
 	virtual void handleTransaction(WTSTransData* transData){}
+
+	/*
+	 *	处理收到的数据，一般是 JSON 格式
+	 *	@data	JSON 字符串
+	 *  @length 数据长度
+	 */
+	virtual void handleData(const char* data, int length) {};
 
 	/*
 	 *	处理解析模块的日志
@@ -131,6 +138,13 @@ public:
 	 *	注册回调接口
 	 */
 	virtual void registerSpi(IParserSpi* spi) {}
+
+	/*
+	 *	处理收到的数据，一般是 JSON 格式
+	 *	@data	JSON 字符串
+	 *  @length 数据长度
+	 */
+	virtual void handleData(const char* data, int length) {};
 };
 
 NS_WTP_END

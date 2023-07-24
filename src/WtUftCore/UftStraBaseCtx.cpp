@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #include "UftStraBaseCtx.h"
 #include "WtUftEngine.h"
@@ -126,9 +126,9 @@ uint32_t UftStraBaseCtx::stra_exit_short(const char* stdCode, double price, doub
 	return _trader->closeShort(stdCode, price, qty, isToday, flag);
 }
 
-WTSCommodityInfo* UftStraBaseCtx::stra_get_comminfo(const char* stdCode)
+WTSContractInfo* UftStraBaseCtx::stra_get_contract(const char* stdCode, const char* exchg)
 {
-	return _engine->get_commodity_info(stdCode);
+	return _engine->get_contract_info(stdCode, exchg);
 }
 
 WTSKlineSlice* UftStraBaseCtx::stra_get_bars(const char* stdCode, const char* period, uint32_t count)

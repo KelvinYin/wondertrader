@@ -4,7 +4,7 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
+ *
  * \brief Wt基础结构体定义
  */
 #pragma once
@@ -105,7 +105,7 @@ public:
 	double		low;		//低
 	double		close;		//收
 	double		settle;		//结算
-	
+
 	double		money;		//成交金额
 	double		vol;		//成交量
 
@@ -119,7 +119,7 @@ public:
 	{
 		double		add;	//增仓
 		double		ask;	//卖价，期权专用，主要期权spread比较大，By Wseley @ 2023.05.04
-	};	
+	};
 
 	//By Wesley @ 2021.12.30
 	//直接复制老结构体
@@ -173,10 +173,10 @@ struct WTSTickStruct
 	double		pre_settle;			//昨结算
 	double		pre_interest;		//上日总持
 
-	double		bid_prices[10];		//委买价格
-	double		ask_prices[10];		//委卖价格
-	double		bid_qty[10];		//委买量
-	double		ask_qty[10];		//委卖量
+	double		bid_prices[20];		//委买价格
+	double		ask_prices[20];		//委卖价格
+	double		bid_qty[20];		//委买量
+	double		ask_qty[20];		//委卖量
 	WTSTickStruct()
 	{
 		memset(this, 0, sizeof(WTSTickStruct));
@@ -211,7 +211,7 @@ struct WTSTickStruct
 		pre_interest = tick.pre_interest;
 		pre_settle = tick.pre_settle;
 
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 20; i++)
 		{
 			bid_prices[i] = tick.bid_prices[i];
 			bid_qty[i] = tick.bid_qty[i];

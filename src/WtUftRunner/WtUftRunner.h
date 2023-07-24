@@ -4,8 +4,8 @@
  *
  * /author Wesley
  * /date 2020/03/30
- * 
- * /brief 
+ *
+ * /brief
  */
 #pragma once
 #include <string>
@@ -69,7 +69,6 @@ private:
 	WtUftDtMgr			_data_mgr;
 
 	WTSBaseDataMgr		_bd_mgr;
-	WTSHotMgr			_hot_mgr;
 
 	UftStrategyMgr		_uft_stra_mgr;
 

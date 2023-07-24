@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #include "ParserAdapter.h"
 #include "WtUftEngine.h"
@@ -19,6 +19,8 @@
 #include "../Share/StrUtil.hpp"
 
 #include "../WTSTools/WTSLogger.h"
+
+#include "../ParserBA/ParserBA.h"
 
 USING_NS_WTP;
 
@@ -56,66 +58,44 @@ bool ParserAdapter::init(const char* id, WTSVariant* cfg, IParserStub* stub, IBa
 
 	{
 		//加载模块
-		if (cfg->getString("module").empty())
-			return false;
+		// if (cfg->getString("module").empty())
+		// 	return false;
 
-		std::string module = DLLHelper::wrap_module(cfg->getCString("module"), "lib");;
+		// std::string module = DLLHelper::wrap_module(cfg->getCString("module"), "lib");;
 
-		//先看工作目录下是否有交易模块
-		std::string dllpath = WtHelper::getModulePath(module.c_str(), "parsers", true);
-		//如果没有,则再看模块目录,即dll同目录下
-		if (!StdFile::exists(dllpath.c_str()))
-			dllpath = WtHelper::getModulePath(module.c_str(), "parsers", false);
+		// //先看工作目录下是否有交易模块
+		// std::string dllpath = WtHelper::getModulePath(module.c_str(), "parsers", true);
+		// //如果没有,则再看模块目录,即dll同目录下
+		// if (!StdFile::exists(dllpath.c_str()))
+		// 	dllpath = WtHelper::getModulePath(module.c_str(), "parsers", false);
 
-		DllHandle hInst = DLLHelper::load_library(dllpath.c_str());
-		if (hInst == NULL)
-		{
-			WTSLogger::log_dyn("parser", _id.c_str(), LL_ERROR, "[{}] Parser module {} loading failed", _id.c_str(), dllpath.c_str());
-			return false;
-		}
-		else
-		{
-			WTSLogger::log_dyn("parser", _id.c_str(), LL_INFO, "[{}] Parser module {} loaded", _id.c_str(), dllpath.c_str());
-		}
+		// DllHandle hInst = DLLHelper::load_library(dllpath.c_str());
+		// if (hInst == NULL)
+		// {
+		// 	WTSLogger::log_dyn("parser", _id.c_str(), LL_ERROR, "[{}] Parser module {} loading failed", _id.c_str(), dllpath.c_str());
+		// 	return false;
+		// }
+		// else
+		// {
+		// 	WTSLogger::log_dyn("parser", _id.c_str(), LL_INFO, "[{}] Parser module {} loaded", _id.c_str(), dllpath.c_str());
+		// }
 
-		FuncCreateParser pFuncCreateParser = (FuncCreateParser)DLLHelper::get_symbol(hInst, "createParser");
-		if (NULL == pFuncCreateParser)
-		{
-			WTSLogger::log_dyn("parser", _id.c_str(), LL_FATAL, "[{}] Entrance function createParser not found", _id.c_str());
-			return false;
-		}
+		// FuncCreateParser pFuncCreateParser = (FuncCreateParser)DLLHelper::get_symbol(hInst, "createParser");
+		// if (NULL == pFuncCreateParser)
+		// {
+		// 	WTSLogger::log_dyn("parser", _id.c_str(), LL_FATAL, "[{}] Entrance function createParser not found", _id.c_str());
+		// 	return false;
+		// }
 
-		_parser_api = pFuncCreateParser();
-		if (NULL == _parser_api)
-		{
-			WTSLogger::log_dyn("parser", _id.c_str(), LL_FATAL, "[{}] Creating parser api failed", _id.c_str());
-			return false;
-		}
+		// _parser_api = pFuncCreateParser();
+		// if (NULL == _parser_api)
+		// {
+		// 	WTSLogger::log_dyn("parser", _id.c_str(), LL_FATAL, "[{}] Creating parser api failed", _id.c_str());
+		// 	return false;
+		// }
 
-		_remover = (FuncDeleteParser)DLLHelper::get_symbol(hInst, "deleteParser");
-	}
-	
-
-	const std::string& strFilter = cfg->getString("filter");
-	if (!strFilter.empty())
-	{
-		const StringVector &ayFilter = StrUtil::split(strFilter, ",");
-		auto it = ayFilter.begin();
-		for (; it != ayFilter.end(); it++)
-		{
-			_exchg_filter.insert(*it);
-		}
-	}
-
-	std::string strCodes = cfg->getString("code");
-	if (!strCodes.empty())
-	{
-		const StringVector &ayCodes = StrUtil::split(strCodes, ",");
-		auto it = ayCodes.begin();
-		for (; it != ayCodes.end(); it++)
-		{
-			_code_filter.insert(*it);
-		}
+		// _remover = (FuncDeleteParser)DLLHelper::get_symbol(hInst, "deleteParser");
+		_parser_api = new ParserBA();
 	}
 
 	if (_parser_api)
@@ -124,47 +104,6 @@ bool ParserAdapter::init(const char* id, WTSVariant* cfg, IParserStub* stub, IBa
 
 		if (_parser_api->init(cfg))
 		{
-			ContractSet contractSet;
-			WTSArray* ay = _bd_mgr->getContracts();
-			for(auto it = ay->begin(); it != ay->end(); it++)
-			{
-				WTSContractInfo* cInfo = STATIC_CONVERT(*it, WTSContractInfo*);
-
-				//先检查合约和品种是否符合条件
-				if(!_code_filter.empty())
-				{
-					auto cit = _code_filter.find(cInfo->getFullCode());
-					auto pit = _code_filter.find(cInfo->getFullPid());
-					if (cit != _code_filter.end() || pit != _code_filter.end())
-					{
-						contractSet.insert(cInfo->getFullCode());
-						continue;
-					}
-				}
-				
-				//再检查交易所是否符合条件
-				if (!_exchg_filter.empty())
-				{
-					auto eit = _exchg_filter.find(cInfo->getExchg());
-					if (eit != _exchg_filter.end())
-					{
-						contractSet.insert(cInfo->getFullCode());
-						continue;
-					}
-					else
-					{
-						continue;
-					}
-				}
-
-				if(_code_filter.empty() && _exchg_filter.empty())
-					contractSet.insert(cInfo->getFullCode());
-
-			}
-			ay->release();
-
-			_parser_api->subscribe(contractSet);
-			contractSet.clear();
 		}
 		else
 		{
@@ -195,47 +134,6 @@ bool ParserAdapter::initExt(const char* id, IParserApi* api, IParserStub* stub, 
 
 		if (_parser_api->init(NULL))
 		{
-			ContractSet contractSet;
-			WTSArray* ay = _bd_mgr->getContracts();
-			for (auto it = ay->begin(); it != ay->end(); it++)
-			{
-				WTSContractInfo* cInfo = STATIC_CONVERT(*it, WTSContractInfo*);
-
-				//先检查合约和品种是否符合条件
-				if (!_code_filter.empty())
-				{
-					auto cit = _code_filter.find(cInfo->getFullCode());
-					auto pit = _code_filter.find(cInfo->getFullPid());
-					if (cit != _code_filter.end() || pit != _code_filter.end())
-					{
-						contractSet.insert(cInfo->getFullCode());
-						continue;
-					}
-				}
-
-				//再检查交易所是否符合条件
-				if (!_exchg_filter.empty())
-				{
-					auto eit = _exchg_filter.find(cInfo->getExchg());
-					if (eit != _code_filter.end())
-					{
-						contractSet.insert(cInfo->getFullCode());
-						continue;
-					}
-					else
-					{
-						continue;
-					}
-				}
-
-				if (_code_filter.empty() && _exchg_filter.empty())
-					contractSet.insert(cInfo->getFullCode());
-
-			}
-			ay->release();
-
-			_parser_api->subscribe(contractSet);
-			contractSet.clear();
 		}
 		else
 		{
@@ -271,15 +169,17 @@ bool ParserAdapter::run()
 
 void ParserAdapter::handleQuote(WTSTickData *quote, uint32_t procFlag)
 {
-	if (quote == NULL || _stopped || quote->actiondate() == 0 || quote->tradingdate() == 0)
+	// if (quote == NULL || _stopped || quote->actiondate() == 0 || quote->tradingdate() == 0)
+	// 	return;
+	if (quote == NULL || _stopped)
 		return;
 
-	WTSContractInfo* cInfo = quote->getContractInfo();
-	if (cInfo == NULL) cInfo = _bd_mgr->getContract(quote->code(), quote->exchg());
-	if (cInfo == NULL)
-		return;
+	// WTSContractInfo* cInfo = quote->getContractInfo();
+	// if (cInfo == NULL) cInfo = _bd_mgr->getContract(quote->code(), quote->exchg());
+	// if (cInfo == NULL)
+	// 	return;
 
-	quote->setCode(cInfo->getFullCode());
+	// quote->setCode(cInfo->getFullCode());
 
 	_stub->handle_push_quote(quote);
 }
@@ -299,7 +199,7 @@ void ParserAdapter::handleOrderQueue(WTSOrdQueData* ordQueData)
 	if (cInfo == NULL)
 		return;
 
-	ordQueData->setCode(cInfo->getFullCode());
+	// ordQueData->setCode(cInfo->getFullCode());
 
 	if (_stub)
 		_stub->handle_push_order_queue(ordQueData);
@@ -320,7 +220,7 @@ void ParserAdapter::handleOrderDetail(WTSOrdDtlData* ordDtlData)
 	if (cInfo == NULL)
 		return;
 
-	ordDtlData->setCode(cInfo->getFullCode());
+	// ordDtlData->setCode(cInfo->getFullCode());
 
 	if (_stub)
 		_stub->handle_push_order_detail(ordDtlData);
@@ -341,7 +241,7 @@ void ParserAdapter::handleTransaction(WTSTransData* transData)
 	if (cInfo == NULL)
 		return;
 
-	transData->setCode(cInfo->getFullCode());
+	// transData->setCode(cInfo->getFullCode());
 
 	if (_stub)
 		_stub->handle_push_transaction(transData);
@@ -354,6 +254,12 @@ void ParserAdapter::handleParserLog(WTSLogLevel ll, const char* message)
 		return;
 
 	WTSLogger::log_dyn_raw("parser", _id.c_str(), ll, message);
+}
+
+void ParserAdapter::handleData(const char* data, int length)
+{
+	if (_parser_api)
+		_parser_api->handleData(data, length);
 }
 
 

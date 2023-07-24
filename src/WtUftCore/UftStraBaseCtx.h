@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #pragma once
 
@@ -116,7 +116,7 @@ public:
 	 */
 	virtual uint32_t	stra_exit_short(const char* stdCode, double price, double qty, bool isToday = false, int flag = 0) override;
 
-	virtual WTSCommodityInfo* stra_get_comminfo(const char* stdCode) override;
+	virtual WTSContractInfo* stra_get_contract(const char* stdCode, const char* exchg) override;
 
 	virtual WTSKlineSlice* stra_get_bars(const char* stdCode, const char* period, uint32_t count) override;
 

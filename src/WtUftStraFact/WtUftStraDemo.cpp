@@ -77,7 +77,7 @@ void WtUftStraDemo::on_init(IUftStraCtx* ctx)
 }
 
 void WtUftStraDemo::on_tick(IUftStraCtx* ctx, const char* code, WTSTickData* newTick)
-{	
+{
 	if (_code.compare(code) != 0)
 		return;
 
@@ -87,12 +87,14 @@ void WtUftStraDemo::on_tick(IUftStraCtx* ctx, const char* code, WTSTickData* new
 		return;
 	}
 
-	if (!_channel_ready)
-		return;
+	// if (!_channel_ready)
+	// 	return;
 
 	WTSTickData* curTick = ctx->stra_get_last_tick(code);
 	if (curTick)
 		curTick->release();
+
+	WTSContractInfo* cInfo = curTick->getContractInfo();
 
 	uint32_t curMin = newTick->actiontime() / 100000;	//actiontime是带毫秒的,要取得分钟,则需要除以10w
 	if (curMin > _last_calc_time)
@@ -133,8 +135,6 @@ void WtUftStraDemo::on_tick(IUftStraCtx* ctx, const char* code, WTSTickData* new
 	{
 		double curPos = ctx->stra_get_position(code);
 
-		WTSCommodityInfo* cInfo = ctx->stra_get_comminfo(code);
-
 		if(signal > 0  && decimal::le(curPos, 0))
 		{//正向信号,且当前仓位小于等于0
 			//最新价+2跳下单
@@ -149,7 +149,7 @@ void WtUftStraDemo::on_tick(IUftStraCtx* ctx, const char* code, WTSTickData* new
 				_mtx_ords.unlock();
 				_last_entry_time = now;
 			}
-			
+
 		}
 		else if (signal < 0 && decimal::ge(curPos, 0))
 		{//反向信号,且当前仓位大于0,或者仓位为0但不是股票,或者仓位为0但是基础仓位有修正
@@ -190,12 +190,12 @@ void WtUftStraDemo::check_orders()
 
 void WtUftStraDemo::on_bar(IUftStraCtx* ctx, const char* code, const char* period, uint32_t times, WTSBarStruct* newBar)
 {
-	
+
 }
 
 void WtUftStraDemo::on_trade(IUftStraCtx* ctx, uint32_t localid, const char* stdCode, bool isLong, uint32_t offset, double qty, double price)
 {
-	
+
 }
 
 void WtUftStraDemo::on_position(IUftStraCtx* ctx, const char* stdCode, bool isLong, double prevol, double preavail, double newvol, double newavail)

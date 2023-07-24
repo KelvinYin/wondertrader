@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #pragma once
 
@@ -74,9 +74,7 @@ public:
 	inline uint32_t get_trading_date() { return _cur_tdate; }
 
 	inline IBaseDataMgr*		get_basedata_mgr() { return _base_data_mgr; }
-	WTSSessionInfo*		get_session_info(const char* sid, bool isCode = false);
-	WTSCommodityInfo*	get_commodity_info(const char* stdCode);
-	WTSContractInfo*	get_contract_info(const char* stdCode);
+	WTSContractInfo*	get_contract_info(const char* stdCode, const char* exchg);
 
 	WTSTickData*	get_last_tick(uint32_t sid, const char* stdCode);
 	WTSTickSlice*	get_tick_slice(uint32_t sid, const char* stdCode, uint32_t count);
@@ -140,7 +138,7 @@ private:
 	StraSubMap		_ordque_sub_map;	//委托队列订阅表
 	StraSubMap		_orddtl_sub_map;	//委托明细订阅表
 	StraSubMap		_trans_sub_map;		//成交明细订阅表
-	StraSubMap		_bar_sub_map;	//K线数据订阅表	
+	StraSubMap		_bar_sub_map;	//K线数据订阅表
 
 	TraderAdapterMgr*	_adapter_mgr;
 
@@ -148,7 +146,7 @@ private:
 	ContextMap		_ctx_map;
 
 	WtUftRtTicker*	_tm_ticker;
-	WTSVariant*		_cfg;	
+	WTSVariant*		_cfg;
 };
 
 NS_WTP_END

@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #pragma once
 #include <memory>
@@ -74,6 +74,8 @@ public:
 	virtual void handleTransaction(WTSTransData* transData) override;
 
 	virtual void handleParserLog(WTSLogLevel ll, const char* message) override;
+
+	virtual void handleData(const char* data, int length) override;
 
 	virtual IBaseDataMgr* getBaseDataMgr() override { return _bd_mgr; }
 

@@ -4,8 +4,8 @@
  *
  * /author Wesley
  * /date 2020/03/30
- * 
- * /brief 
+ *
+ * /brief
  */
 #include "WtUftRunner.h"
 
@@ -76,28 +76,13 @@ bool WtUftRunner::config()
 		return false;
 	}
 
-	//基础数据文件
+	// 基础数据文件
+	// TODO 从接口中直接读取数据，不从配置文件中读取
 	WTSVariant* cfgBF = _config->get("basefiles");
-	if (cfgBF->get("session"))
-		_bd_mgr.loadSessions(cfgBF->getCString("session"));
+	// if (cfgBF->get("session"))
+		// _bd_mgr.loadSessions(cfgBF->getCString("session"));
 
-	WTSVariant* cfgItem = cfgBF->get("commodity");
-	if (cfgItem)
-	{
-		if (cfgItem->type() == WTSVariant::VT_String)
-		{
-			_bd_mgr.loadCommodities(cfgItem->asCString());
-		}
-		else if (cfgItem->type() == WTSVariant::VT_Array)
-		{
-			for (uint32_t i = 0; i < cfgItem->size(); i++)
-			{
-				_bd_mgr.loadCommodities(cfgItem->get(i)->asCString());
-			}
-		}
-	}
-
-	cfgItem = cfgBF->get("contract");
+	WTSVariant* cfgItem = cfgBF->get("contract");
 	if (cfgItem)
 	{
 		if (cfgItem->type() == WTSVariant::VT_String)
@@ -112,9 +97,6 @@ bool WtUftRunner::config()
 			}
 		}
 	}
-
-	if (cfgBF->get("holiday"))
-		_bd_mgr.loadHolidays(cfgBF->getCString("holiday"));
 
 
 	//初始化运行环境
@@ -195,7 +177,7 @@ bool WtUftRunner::config()
 	}
 
 	initUftStrategies();
-	
+
 	return true;
 }
 
@@ -209,8 +191,8 @@ bool WtUftRunner::initUftStrategies()
 	if (cfg == NULL || cfg->type() != WTSVariant::VT_Array)
 		return false;
 
-	std::string path = WtHelper::getCWD() + "uft/";
-	_uft_stra_mgr.loadFactories(path.c_str());
+	// std::string path = WtHelper::getCWD() + "uft/";
+	// _uft_stra_mgr.loadFactories(path.c_str());
 
 	for (uint32_t idx = 0; idx < cfg->size(); idx++)
 	{
@@ -228,9 +210,9 @@ bool WtUftRunner::initUftStrategies()
 			WTSLogger::info("UFT Strategy {}({}) created", name, id);
 		}
 
-		stra->self()->init(cfgItem->get("params"));
+		stra->init(cfgItem->get("params"));
 		UftStraContext* ctx = new UftStraContext(&_uft_engine, id);
-		ctx->set_strategy(stra->self());
+		ctx->set_strategy(stra.get());
 
 		const char* traderid = cfgItem->getCString("trader");
 		TraderAdapterPtr trader = _traders.getAdapter(traderid);
@@ -268,8 +250,8 @@ bool WtUftRunner::initEngine()
 bool WtUftRunner::initDataMgr()
 {
 	WTSVariant*cfg = _config->get("data");
-	if (cfg == NULL)
-		return false;
+	// if (cfg == NULL)
+	// 	return false;
 
 	_data_mgr.init(cfg, &_uft_engine);
 	WTSLogger::info("Data manager initialized");
@@ -314,7 +296,7 @@ bool WtUftRunner::initTraders(WTSVariant* cfgTrader)
 {
 	if (cfgTrader == NULL || cfgTrader->type() != WTSVariant::VT_Array)
 		return false;
-	
+
 	uint32_t count = 0;
 	for (uint32_t idx = 0; idx < cfgTrader->size(); idx++)
 	{

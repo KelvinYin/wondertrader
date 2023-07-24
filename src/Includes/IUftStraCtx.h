@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #pragma once
 #include <stdint.h>
@@ -71,7 +71,7 @@ public:
 	 *	@localid	本地单号
 	 */
 	virtual bool		stra_cancel(uint32_t localid) = 0;
-	
+
 	/*
 	 *	一键撤单接口
 	 *	@stdCode	合约代码
@@ -136,11 +136,13 @@ public:
 	 */
 	virtual uint32_t	stra_exit_short(const char* stdCode, double price, double qty, bool isToday = false, int flag = 0) { return 0; }
 
+
 	/*
-	 *	获取品种信息
-	 *	@stdCode	代码，格式如SSE.600000
+	 *	获取K线，暂未实现
+	 *	@stdCode	代码
+	 *	@exchg		交易所
 	 */
-	virtual WTSCommodityInfo* stra_get_comminfo(const char* stdCode) = 0;
+	virtual WTSContractInfo* stra_get_contract(const char* stdCode, const char* exchg) = 0;
 
 	/*
 	 *	获取K线，暂未实现
@@ -195,7 +197,7 @@ public:
 	/*
 	 *	枚举持仓，会通过on_position回调进来
 	 *	@stdCode	代码，格式如SSE.600000，如果传空，则枚举全部的
-	 *	
+	 *
 	 */
 	virtual double stra_enum_position(const char* stdCode) = 0;
 

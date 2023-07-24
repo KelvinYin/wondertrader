@@ -4,8 +4,8 @@
  *
  * \author Wesley
  * \date 2020/03/30
- * 
- * \brief 
+ *
+ * \brief
  */
 #define WIN32_LEAN_AND_MEAN
 
@@ -79,34 +79,10 @@ void WtUftEngine::set_trading_date(uint32_t curTDate)
 	WtHelper::setTDate(curTDate);
 }
 
-WTSCommodityInfo* WtUftEngine::get_commodity_info(const char* stdCode)
+WTSContractInfo* WtUftEngine::get_contract_info(const char* stdCode, const char* exchg)
 {
-	const StringVector& ay = StrUtil::split(stdCode, ".");
-	WTSContractInfo* cInfo = _base_data_mgr->getContract(ay[1].c_str(), ay[0].c_str());
-	if (cInfo == NULL)
-		return NULL;
-
-	return cInfo->getCommInfo();
-}
-
-WTSContractInfo* WtUftEngine::get_contract_info(const char* stdCode)
-{
-	const StringVector& ay = StrUtil::split(stdCode, ".");
-	return _base_data_mgr->getContract(ay[1].c_str(), ay[0].c_str());
-}
-
-WTSSessionInfo* WtUftEngine::get_session_info(const char* sid, bool isCode /* = false */)
-{
-	if (!isCode)
-		return _base_data_mgr->getSession(sid);
-
-	const StringVector& ay = StrUtil::split(sid, ".");
-	WTSContractInfo* cInfo = _base_data_mgr->getContract(ay[1].c_str(), ay[0].c_str());
-	if (cInfo == NULL)
-		return NULL;
-
-	WTSCommodityInfo* commInfo = cInfo->getCommInfo();
-	return commInfo->getSessionInfo();
+	// const StringVector& ay = StrUtil::split(stdCode, ".");
+	return _base_data_mgr->getContract(stdCode, exchg);
 }
 
 WTSTickSlice* WtUftEngine::get_tick_slice(uint32_t sid, const char* code, uint32_t count)
@@ -123,11 +99,6 @@ WTSTickData* WtUftEngine::get_last_tick(uint32_t sid, const char* stdCode)
 WTSKlineSlice* WtUftEngine::get_kline_slice(uint32_t sid, const char* stdCode, const char* period, uint32_t count, uint32_t times /* = 1 */, uint64_t etime /* = 0 */)
 {
 	return NULL;
-	WTSCommodityInfo* cInfo = _base_data_mgr->getCommodity(stdCode);
-	if (cInfo == NULL)
-		return NULL;
-
-	WTSSessionInfo* sInfo = cInfo->getSessionInfo();
 
 	std::string key = fmt::format("{}-{}-{}", stdCode, period, times);
 	SubList& sids = _bar_sub_map[key];
