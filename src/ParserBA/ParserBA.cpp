@@ -119,6 +119,8 @@ bool ParserBA::disconnect()
 	return true;
 }
 
+#define BA_EXCHANGE_NAME "BINANCE"
+
 void ParserBA::handleData(const char* data, int length)
 {
 	rj::Document document;
@@ -141,12 +143,12 @@ void ParserBA::handleData(const char* data, int length)
 
 		WTSTickData* tick = WTSTickData::create(symbol.c_str());
 		WTSTickStruct& quote = tick->getTickStruct();
-		strcpy(quote.exchg, "Binance");
+		strcpy(quote.exchg, BA_EXCHANGE_NAME);
 
-	    // WTSContractInfo* contract = m_pBaseDataMgr->getContract(symbol.c_str(), quote.exchg);
-	    // if (contract == NULL)
-	    //     return;
-		// tick->setContractInfo(contract);
+	    WTSContractInfo* contract = m_pBaseDataMgr->getContract(symbol.c_str(), quote.exchg);
+	    if (contract == NULL)
+	        return;
+		tick->setContractInfo(contract);
 
 		rj::SizeType depth_size = 20;
         const rj::Value& depth_b = data_v["b"];

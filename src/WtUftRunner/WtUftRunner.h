@@ -73,5 +73,7 @@ private:
 	UftStrategyMgr		_uft_stra_mgr;
 
 	ActionPolicyMgr		_act_policy;
+
+	std::string 		_exchange;
 };
 

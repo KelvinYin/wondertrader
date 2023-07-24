@@ -133,7 +133,7 @@ public:
 	}
 
 
-	inline void	setVolumeLimits(uint32_t maxMarketVol, uint32_t maxLimitVol, uint32_t minMarketVol = 1, uint32_t minLimitVol = 1)
+	inline void	setVolumeLimits(double maxMarketVol, double maxLimitVol, double minMarketVol = 1, double minLimitVol = 1)
 	{
 		m_maxMktQty = maxMarketVol;
 		m_maxLmtQty = maxLimitVol;
@@ -142,7 +142,7 @@ public:
 		m_minMktQty = minMarketVol;
 	}
 
-	inline void setDates(uint32_t openDate, uint32_t expireDate)
+	inline void setDates(uint64_t openDate, uint64_t expireDate)
 	{
 		m_openDate = openDate;
 		m_expireDate = expireDate;
@@ -152,6 +152,26 @@ public:
 	{
 		m_maintMarginRatio = maintRatio;
 		m_requiredMarginRatio = requiredRatio;
+	}
+
+	inline void setPriceBounds(double min, double max, double tick)
+	{
+		m_minPrice = min;
+		m_maxPrice = max;
+		m_dPriceTick = tick;
+	}
+
+	inline void setLotBounds(double lotSize, double minSize, double minNotional)
+	{
+		m_dLotTick = lotSize;
+		m_dMinLots = minSize;
+		m_minNotional = minNotional;
+	}
+
+	inline void setPercentPrice(double multiplierDown, double multiplierUp)
+	{
+		m_multiplierDown = multiplierDown;
+		m_multiplierUp = multiplierUp;
 	}
 
 	inline const char* getSymbol()	const{return m_strSymbol.c_str();}
@@ -204,7 +224,7 @@ private:
 
 	// filters 限制参数
 	double		m_dPriceTick;	//最小价格变动单位
-	uint32_t	m_uPrecision;	//价格精度
+	uint32_t	m_uPrecision{0};	//价格精度
 
 	double		m_dLotTick;		//数量精度
 	double		m_dMinLots;		//最小交易数量
@@ -224,8 +244,8 @@ private:
 	double		m_multiplierDown;
 	double		m_multiplierUp;
 
-	uint32_t	m_openDate{0};		//上市日期
-	uint32_t	m_expireDate{0};	//交割日
+	uint64_t	m_openDate{0};		//上市日期
+	uint64_t	m_expireDate{0};	//交割日
 
 
 	WTSCommodityInfo*	m_commInfo;

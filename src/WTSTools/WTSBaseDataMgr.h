@@ -18,6 +18,8 @@ typedef WTSHashMap<LongKey>		WTSContractList;
 typedef WTSHashMap<ShortKey>	WTSExchgContract;
 typedef WTSHashMap<LongKey>		WTSContractMap;
 
+#define CONTRACT_TYPE_FILE 0
+#define CONTRACT_TYPE_URL 1
 
 class WTSBaseDataMgr : public IBaseDataMgr
 {
@@ -29,7 +31,7 @@ public:
 	virtual WTSContractInfo*	getContract(const char* code, const char* exchg = "") override;
 	virtual WTSArray*			getContracts(const char* exchg = "") override;
 
-	bool loadContracts(const char* http_url);
+	bool loadContracts(uint32_t type, const char* http_url = "");
 	void release();
 
 private:
