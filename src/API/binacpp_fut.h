@@ -24,7 +24,7 @@ using namespace std;
 class BinaFuturesCPP
 {
 public:
-	void init(string &key, string &secret);
+	void init(string &key, string &secret, string& url);
 	void cleanup();
 
 	// Public API
@@ -67,6 +67,7 @@ public:
 	void close_userDataStream(const char *listenKey);
 
 private:
-	string api_key{""};
-	string secret_key{""};
+	string api_key_{""};
+	string secret_key_{""};
+	string url_{BINANCE_FUTURE_HOST};
 };

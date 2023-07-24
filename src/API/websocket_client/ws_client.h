@@ -26,7 +26,7 @@ class websocket_client {
 
 public:
     websocket_client(client_callback_t *callback,
-                     std::string url_,
+                     std::string url_ = "",
                      std::string origin = "",
                      std::string ca_file_path = "",
                      int32_t cpu_affinity = -1,
@@ -35,6 +35,10 @@ public:
     virtual ~websocket_client() noexcept;
 
     [[nodiscard]] const std::string &url() const noexcept { return url_; }
+
+    void init();
+
+    void set_url(std::string &url);
 
     /**
      * Connect to WebSocket server

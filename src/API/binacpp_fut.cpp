@@ -8,10 +8,11 @@
 #include "binacpp_logger.h"
 #include "binacpp_utils.h"
 
-void BinaFuturesCPP::init(string &key, string &secret)
+void BinaFuturesCPP::init(string &url, string &key, string &secret)
 {
-	api_key = key;
-	secret_key = secret;
+	api_key_ = key;
+	secret_key_ = secret;
+	url_ = url;
 }
 
 void BinaFuturesCPP::cleanup()
@@ -25,10 +26,9 @@ void BinaFuturesCPP::get_serverTime(Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_serverTime>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/time";
+	url_ += "/fapi/v1/time";
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -56,10 +56,9 @@ void BinaFuturesCPP::get_exchangeInfo(Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_exchangeInfo>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/exchangeInfo";
+	url_ += "/fapi/v1/exchangeInfo";
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -93,18 +92,17 @@ void BinaFuturesCPP::get_depth(const char *symbol, int limit, Json::Value &json_
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_depth>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/depth?";
+	url_ += "/fapi/v1/depth?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
 	querystring.append("&limit=");
 	querystring.append(to_string(limit));
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_depth> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_depth> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -138,18 +136,17 @@ void BinaFuturesCPP::get_trades(const char *symbol, int limit, Json::Value &json
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_trades>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/trades?";
+	url_ += "/fapi/v1/trades?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
 	querystring.append("&limit=");
 	querystring.append(to_string(limit));
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_trades> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_trades> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -194,8 +191,7 @@ void BinaFuturesCPP::get_aggTrades(
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_aggTrades>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/aggTrades?";
+	url_ += "/fapi/v1/aggTrades?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
@@ -216,11 +212,11 @@ void BinaFuturesCPP::get_aggTrades(
 		querystring.append("&limit=");
 		querystring.append(to_string(limit));
 	}
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_aggTrades> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_aggTrades> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -263,8 +259,7 @@ void BinaFuturesCPP::get_klines(
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_klines>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/klines?";
+	url_ += "/fapi/v1/klines?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
@@ -286,10 +281,10 @@ void BinaFuturesCPP::get_klines(
 		querystring.append(to_string(limit));
 	}
 
-	url.append(querystring);
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_klines> url = |%s|", url.c_str());
+	url_.append(querystring);
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_klines> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -320,16 +315,15 @@ void BinaFuturesCPP::get_24hr(const char *symbol, Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_24hr>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/ticker/24hr?";
+	url_ += "/fapi/v1/ticker/24hr?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
 
-	url.append(querystring);
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_24hr> url = |%s|", url.c_str());
+	url_.append(querystring);
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_24hr> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -361,8 +355,7 @@ void BinaFuturesCPP::get_price(const char *symbol, Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_price>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/ticker/price?";
+	url_ += "/fapi/v1/ticker/price?";
 
 	string querystring;
 	if (symbol != nullptr && strlen(symbol) > 0)
@@ -370,11 +363,11 @@ void BinaFuturesCPP::get_price(const char *symbol, Json::Value &json_result)
 		querystring.append("symbol=");
 		querystring.append(symbol);
 	}
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_price> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_price> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -406,8 +399,7 @@ void BinaFuturesCPP::get_bookTicker(const char *symbol, Json::Value &json_result
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_BookTicker>");
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/ticker/bookTicker?";
+	url_ += "/fapi/v1/ticker/bookTicker?";
 
 	string querystring;
 	if (symbol != nullptr && strlen(symbol) > 0)
@@ -415,11 +407,11 @@ void BinaFuturesCPP::get_bookTicker(const char *symbol, Json::Value &json_result
 		querystring.append("symbol=");
 		querystring.append(symbol);
 	}
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_BookTicker> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_BookTicker> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url});
+	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
 		try
@@ -453,14 +445,13 @@ void BinaFuturesCPP::get_balance(long recvWindow, Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v2/balance?";
+	url_ += "/fapi/v2/balance?";
 	string querystring("timestamp=");
 	querystring.append(to_string(get_current_ms_epoch()));
 
@@ -470,14 +461,14 @@ void BinaFuturesCPP::get_balance(long recvWindow, Json::Value &json_result)
 		querystring.append(to_string(recvWindow));
 	}
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=");
 	querystring.append(signature);
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -512,14 +503,13 @@ void BinaFuturesCPP::get_account(long recvWindow, Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_account>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_account> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v2/account?";
+	url_ += "/fapi/v2/account?";
 	string querystring("timestamp=");
 	querystring.append(to_string(get_current_ms_epoch()));
 
@@ -529,14 +519,14 @@ void BinaFuturesCPP::get_account(long recvWindow, Json::Value &json_result)
 		querystring.append(to_string(recvWindow));
 	}
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=");
 	querystring.append(signature);
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_account> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_account> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -571,15 +561,13 @@ void BinaFuturesCPP::send_order(
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::send_order>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::send_order> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	// url += "/fapi/v1/order?";
-	url += "/fapi/v1/order?";
+	url_ += "/fapi/v1/order?";
 
 	string post_data("symbol=");
 	post_data.append(symbol);
@@ -607,12 +595,12 @@ void BinaFuturesCPP::send_order(
 	}
 	post_data.append("&timestamp=").append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), post_data.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), post_data.c_str());
 	post_data.append("&signature=").append(signature);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::send_order> url = |%s|, post_data = |%s|", url.c_str(), post_data.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::send_order> url = |%s|, post_data = |%s|", url_.c_str(), post_data.c_str());
 
-	cpr::Response r = cpr::Post(cpr::Url{url}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Post(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -661,14 +649,13 @@ void BinaFuturesCPP::cancel_order(const char *symbol, long orderId, const char *
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/order?";
+	url_ += "/fapi/v1/order?";
 
 	string post_data("symbol=");
 	post_data.append(symbol);
@@ -690,12 +677,12 @@ void BinaFuturesCPP::cancel_order(const char *symbol, long orderId, const char *
 
 	post_data.append("&timestamp=").append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), post_data.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), post_data.c_str());
 	post_data.append("&signature=").append(signature);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order> url = |%s|, post_data = |%s|", url.c_str(), post_data.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order> url = |%s|, post_data = |%s|", url_.c_str(), post_data.c_str());
 
-	cpr::Response r = cpr::Delete(cpr::Url{url}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Delete(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -728,14 +715,13 @@ void BinaFuturesCPP::cancel_allOrder(const char *symbol, long recvWindow, Json::
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/allOpenOrders?";
+	url_ += "/fapi/v1/allOpenOrders?";
 
 	string post_data("symbol=");
 	post_data.append(symbol);
@@ -747,12 +733,12 @@ void BinaFuturesCPP::cancel_allOrder(const char *symbol, long recvWindow, Json::
 
 	post_data.append("&timestamp=").append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), post_data.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), post_data.c_str());
 	post_data.append("&signature=").append(signature);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder> url = |%s|, post_data = |%s|", url.c_str(), post_data.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder> url = |%s|, post_data = |%s|", url_.c_str(), post_data.c_str());
 
-	cpr::Response r = cpr::Delete(cpr::Url{url}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Delete(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -794,14 +780,13 @@ void BinaFuturesCPP::get_myTrades(
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v3/myTrades?";
+	url_ += "/fapi/v3/myTrades?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
@@ -827,14 +812,14 @@ void BinaFuturesCPP::get_myTrades(
 	querystring.append("&timestamp=");
 	querystring.append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=");
 	querystring.append(signature);
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -869,14 +854,13 @@ void BinaFuturesCPP::get_openOrders(const char *symbol, long recvWindow, Json::V
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/openOrders?";
+	url_ += "/fapi/v1/openOrders?";
 
 	if (symbol == nullptr)
 	{
@@ -893,13 +877,13 @@ void BinaFuturesCPP::get_openOrders(const char *symbol, long recvWindow, Json::V
 	}
 	querystring.append("&timestamp=").append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=").append(signature);
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -924,14 +908,13 @@ void BinaFuturesCPP::get_openOrder(const char *symbol, long orderId, const char 
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrder>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/openOrder?";
+	url_ += "/fapi/v1/openOrder?";
 
 	if (symbol == nullptr)
 	{
@@ -958,13 +941,13 @@ void BinaFuturesCPP::get_openOrder(const char *symbol, long orderId, const char 
 	}
 	querystring.append("&timestamp=").append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=").append(signature);
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrder> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrder> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -1002,14 +985,13 @@ void BinaFuturesCPP::get_allOrders(const char *symbol, long orderId, long startT
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/allOrders?";
+	url_ += "/fapi/v1/allOrders?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
@@ -1041,13 +1023,13 @@ void BinaFuturesCPP::get_allOrders(const char *symbol, long orderId, long startT
 
 	querystring.append("&timestamp=").append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=").append(signature);
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -1085,15 +1067,13 @@ void BinaFuturesCPP::get_order(const char *symbol, long orderId, const char *ori
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_order>");
 
-	if (api_key.size() == 0 || secret_key.size() == 0)
+	if (api_key_.size() == 0 || secret_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::get_order> API Key and Secret Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/order?";
-	string action = "GET";
+	url_ += "/fapi/v1/order?";
 
 	string querystring("symbol=");
 	querystring.append(symbol);
@@ -1119,15 +1099,15 @@ void BinaFuturesCPP::get_order(const char *symbol, long orderId, const char *ori
 	querystring.append("&timestamp=");
 	querystring.append(to_string(get_current_ms_epoch()));
 
-	string signature = hmac_sha256(secret_key.c_str(), querystring.c_str());
+	string signature = hmac_sha256(secret_key_.c_str(), querystring.c_str());
 	querystring.append("&signature=");
 	querystring.append(signature);
 
-	url.append(querystring);
+	url_.append(querystring);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::get_order> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::get_order> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Get(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -1157,18 +1137,17 @@ void BinaFuturesCPP::start_userDataStream(Json::Value &json_result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream>");
 
-	if (api_key.size() == 0)
+	if (api_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream> API Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/userDataStream";
+	url_ += "/fapi/v1/userDataStream";
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream> url = |%s|", url.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream> url = |%s|", url_.c_str());
 
-	cpr::Response r = cpr::Post(cpr::Url{url}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Post(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		try
@@ -1195,21 +1174,20 @@ void BinaFuturesCPP::keep_userDataStream(const char *listenKey)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::keep_userDataStream>");
 
-	if (api_key.size() == 0)
+	if (api_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::keep_userDataStream> API Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/userDataStream";
+	url_ += "/fapi/v1/userDataStream";
 
 	string post_data("listenKey=");
 	post_data.append(listenKey);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::keep_userDataStream> url = |%s|, post_data = |%s|", url.c_str(), post_data.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::keep_userDataStream> url = |%s|, post_data = |%s|", url_.c_str(), post_data.c_str());
 
-	cpr::Response r = cpr::Put(cpr::Url{url}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Put(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::keep_userDataStream> Done.");
@@ -1226,21 +1204,20 @@ void BinaFuturesCPP::close_userDataStream(const char *listenKey)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::close_userDataStream>");
 
-	if (api_key.size() == 0)
+	if (api_key_.size() == 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::close_userDataStream> API Key has not been set.");
 		return;
 	}
 
-	string url(BINANCE_FUTURE_HOST);
-	url += "/fapi/v1/userDataStream";
+	url_ += "/fapi/v1/userDataStream";
 
 	string post_data("listenKey=");
 	post_data.append(listenKey);
 
-	BinaCPP_logger::write_log("<BinaFuturesCPP::close_userDataStream> url = |%s|, post_data = |%s|", url.c_str(), post_data.c_str());
+	BinaCPP_logger::write_log("<BinaFuturesCPP::close_userDataStream> url = |%s|, post_data = |%s|", url_.c_str(), post_data.c_str());
 
-	cpr::Response r = cpr::Delete(cpr::Url{url}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key}});
+	cpr::Response r = cpr::Delete(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
 		BinaCPP_logger::write_log("<BinaFuturesCPP::close_userDataStream> Done.");

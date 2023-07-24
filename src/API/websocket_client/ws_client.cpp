@@ -14,10 +14,33 @@ websocket_client::websocket_client(client_callback_t *callback,
                                    std::string ca_file_path,
                                    int32_t cpu_affinity,
                                    bool use_global_service)
-        : callback_(callback), service_(use_global_service
-                                        ? socket_service::global(ca_file_path, cpu_affinity) : new socket_service(
-                std::move(ca_file_path), cpu_affinity)), url_(std::move(url)), origin_(std::move(origin)) {
+        : callback_(callback)
+        , service_(use_global_service ? socket_service::global(ca_file_path, cpu_affinity) : new socket_service(
+                std::move(ca_file_path), cpu_affinity))
+        , url_(std::move(url))
+        , origin_(std::move(origin))
+{
+}
 
+websocket_client::~websocket_client() noexcept
+{
+    if (service_ && !service_->is_global()) {
+        delete service_;
+        service_ = nullptr;
+    }
+    stop();
+}
+
+void websocket_client::set_url(std::string &url)
+{
+    if (url_.length() > 0)
+        url_ = url_.append(url);
+    else
+        url_ = url;
+}
+
+void websocket_client::init()
+{
     std::string protoco("wss");
     auto pos = url_.find("://");
     if (pos == std::string::npos) {
@@ -51,15 +74,6 @@ websocket_client::websocket_client(client_callback_t *callback,
     if (port_ == -1) {
         port_ = (protoco == "ws") ? 80 : 443;
     }
-
-}
-
-websocket_client::~websocket_client() noexcept {
-    if (service_ && !service_->is_global()) {
-        delete service_;
-        service_ = nullptr;
-    }
-    stop();
 }
 
 bool websocket_client::connect() noexcept {
