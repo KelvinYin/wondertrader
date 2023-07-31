@@ -22,7 +22,7 @@ void BinaFuturesCPP::cleanup()
 //------------------
 // GET /fapi/v1/time
 //------------
-void BinaFuturesCPP::get_serverTime(Json::Value &json_result)
+void BinaFuturesCPP::get_serverTime(std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_serverTime>");
 
@@ -31,17 +31,7 @@ void BinaFuturesCPP::get_serverTime(Json::Value &json_result)
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_serverTime> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_serverTime> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -52,7 +42,7 @@ void BinaFuturesCPP::get_serverTime(Json::Value &json_result)
 //------------------
 // GET /fapi/v1/exchangeInfo
 //------------------
-void BinaFuturesCPP::get_exchangeInfo(Json::Value &json_result)
+void BinaFuturesCPP::get_exchangeInfo(std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_exchangeInfo>");
 
@@ -61,17 +51,7 @@ void BinaFuturesCPP::get_exchangeInfo(Json::Value &json_result)
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_exchangeInfo> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_exchangeInfo> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -88,7 +68,7 @@ void BinaFuturesCPP::get_exchangeInfo(Json::Value &json_result)
 // symbol	STRING		YES
 // limit	INT			NO			Default 500; Valid limits:[5, 10, 20, 50, 100, 500, 1000]
 
-void BinaFuturesCPP::get_depth(const char *symbol, int limit, Json::Value &json_result)
+void BinaFuturesCPP::get_depth(const char *symbol, int limit, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_depth>");
 
@@ -105,17 +85,7 @@ void BinaFuturesCPP::get_depth(const char *symbol, int limit, Json::Value &json_
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_depth> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_depth> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -132,7 +102,7 @@ void BinaFuturesCPP::get_depth(const char *symbol, int limit, Json::Value &json_
 // symbol	STRING		YES
 // limit	INT			NO			Default 500; Max:1000
 
-void BinaFuturesCPP::get_trades(const char *symbol, int limit, Json::Value &json_result)
+void BinaFuturesCPP::get_trades(const char *symbol, int limit, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_trades>");
 
@@ -149,17 +119,7 @@ void BinaFuturesCPP::get_trades(const char *symbol, int limit, Json::Value &json
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_trades> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_trades> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -187,7 +147,7 @@ void BinaFuturesCPP::get_aggTrades(
 	time_t startTime,
 	time_t endTime,
 	int limit,
-	Json::Value &json_result)
+	std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_aggTrades>");
 
@@ -219,17 +179,7 @@ void BinaFuturesCPP::get_aggTrades(
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_aggTrades> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_aggTrades> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -255,7 +205,7 @@ void BinaFuturesCPP::get_klines(
 	int limit,
 	time_t startTime,
 	time_t endTime,
-	Json::Value &json_result)
+	std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_klines>");
 
@@ -287,17 +237,7 @@ void BinaFuturesCPP::get_klines(
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_klines> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_klines> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -311,7 +251,7 @@ void BinaFuturesCPP::get_klines(
 // Name		Type	Mandatory	Description
 // symbol	STRING	YES
 //
-void BinaFuturesCPP::get_24hr(const char *symbol, Json::Value &json_result)
+void BinaFuturesCPP::get_24hr(const char *symbol, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_24hr>");
 
@@ -326,17 +266,7 @@ void BinaFuturesCPP::get_24hr(const char *symbol, Json::Value &json_result)
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_24hr> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_24hr> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -351,7 +281,7 @@ void BinaFuturesCPP::get_24hr(const char *symbol, Json::Value &json_result)
 // Name		Type	Mandatory	Description
 // symbol	STRING	NO
 //
-void BinaFuturesCPP::get_price(const char *symbol, Json::Value &json_result)
+void BinaFuturesCPP::get_price(const char *symbol, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_price>");
 
@@ -370,17 +300,7 @@ void BinaFuturesCPP::get_price(const char *symbol, Json::Value &json_result)
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_price> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_price> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -395,7 +315,7 @@ void BinaFuturesCPP::get_price(const char *symbol, Json::Value &json_result)
 //	Name	Type	Mandatory	Description
 //	symbol	STRING	NO
 //
-void BinaFuturesCPP::get_bookTicker(const char *symbol, Json::Value &json_result)
+void BinaFuturesCPP::get_bookTicker(const char *symbol, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_BookTicker>");
 
@@ -414,17 +334,7 @@ void BinaFuturesCPP::get_bookTicker(const char *symbol, Json::Value &json_result
 	cpr::Response r = cpr::Get(cpr::Url{url_});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_BookTicker> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_BookTicker> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -441,7 +351,7 @@ void BinaFuturesCPP::get_bookTicker(const char *symbol, Json::Value &json_result
 //	recvWindow	LONG	NO
 //	timestamp	LONG	YES
 //
-void BinaFuturesCPP::get_balance(long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::get_balance(long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance>");
 
@@ -471,17 +381,7 @@ void BinaFuturesCPP::get_balance(long recvWindow, Json::Value &json_result)
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_balance> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -499,7 +399,7 @@ void BinaFuturesCPP::get_balance(long recvWindow, Json::Value &json_result)
 //	recvWindow	LONG	NO
 //	timestamp	LONG	YES
 //
-void BinaFuturesCPP::get_account(long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::get_account(long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_account>");
 
@@ -529,17 +429,7 @@ void BinaFuturesCPP::get_account(long recvWindow, Json::Value &json_result)
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_account> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_account> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -557,7 +447,7 @@ void BinaFuturesCPP::send_order(
 	double price,
 	const char *newClientOrderId,
 	long recvWindow,
-	Json::Value &json_result)
+	std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::send_order>");
 
@@ -603,17 +493,7 @@ void BinaFuturesCPP::send_order(
 	cpr::Response r = cpr::Post(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::send_order> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::send_order> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -628,9 +508,9 @@ void BinaFuturesCPP::send_marketOrder(
 	double quantity,
 	const char *newClientOrderId,
 	long recvWindow,
-	Json::Value &json_result)
+	std::string &result)
 {
-	send_order(symbol, side, "MARKET", nullptr, reduceOnly, quantity, 0.0, newClientOrderId, recvWindow, json_result);
+	send_order(symbol, side, "MARKET", nullptr, reduceOnly, quantity, 0.0, newClientOrderId, recvWindow, result);
 }
 
 //------------
@@ -645,7 +525,7 @@ void BinaFuturesCPP::send_marketOrder(
 // timestamp			LONG	YES
 //
 
-void BinaFuturesCPP::cancel_order(const char *symbol, long orderId, const char *origClientOrderId, long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::cancel_order(const char *symbol, long orderId, const char *origClientOrderId, long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order>");
 
@@ -685,17 +565,7 @@ void BinaFuturesCPP::cancel_order(const char *symbol, long orderId, const char *
 	cpr::Response r = cpr::Delete(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_order> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -711,7 +581,7 @@ void BinaFuturesCPP::cancel_order(const char *symbol, long orderId, const char *
 // recvWindow	LONG	NO
 // timestamp	LONG	YES
 //
-void BinaFuturesCPP::cancel_allOrder(const char *symbol, long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::cancel_allOrder(const char *symbol, long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder>");
 
@@ -741,17 +611,7 @@ void BinaFuturesCPP::cancel_allOrder(const char *symbol, long recvWindow, Json::
 	cpr::Response r = cpr::Delete(cpr::Url{url_}, cpr::Body{post_data}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::cancel_allOrder> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -776,7 +636,7 @@ void BinaFuturesCPP::get_myTrades(
 	int limit,
 	long fromId,
 	long recvWindow,
-	Json::Value &json_result)
+	std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades>");
 
@@ -822,17 +682,7 @@ void BinaFuturesCPP::get_myTrades(
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_myTrades> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -850,7 +700,7 @@ void BinaFuturesCPP::get_myTrades(
 //  recvWindow	LONG	NO
 //  timestamp	LONG	YES
 //
-void BinaFuturesCPP::get_openOrders(const char *symbol, long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::get_openOrders(const char *symbol, long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders>");
 
@@ -886,17 +736,7 @@ void BinaFuturesCPP::get_openOrders(const char *symbol, long recvWindow, Json::V
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrders> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -904,7 +744,7 @@ void BinaFuturesCPP::get_openOrders(const char *symbol, long recvWindow, Json::V
 	}
 }
 
-void BinaFuturesCPP::get_openOrder(const char *symbol, long orderId, const char *origClientOrderId, long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::get_openOrder(const char *symbol, long orderId, const char *origClientOrderId, long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrder>");
 
@@ -950,17 +790,7 @@ void BinaFuturesCPP::get_openOrder(const char *symbol, long orderId, const char 
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrder> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_openOrder> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -981,7 +811,7 @@ void BinaFuturesCPP::get_openOrder(const char *symbol, long orderId, const char 
 // timestamp	LONG	YES
 //
 void BinaFuturesCPP::get_allOrders(const char *symbol, long orderId, long startTime, long endTime,
-	int limit, long recvWindow, Json::Value &json_result)
+	int limit, long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders>");
 
@@ -1032,17 +862,7 @@ void BinaFuturesCPP::get_allOrders(const char *symbol, long orderId, long startT
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_allOrders> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -1063,7 +883,7 @@ recvWindow			LONG	NO
 timestamp			LONG	YES
 */
 
-void BinaFuturesCPP::get_order(const char *symbol, long orderId, const char *origClientOrderId, long recvWindow, Json::Value &json_result)
+void BinaFuturesCPP::get_order(const char *symbol, long orderId, const char *origClientOrderId, long recvWindow, std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::get_order>");
 
@@ -1110,17 +930,7 @@ void BinaFuturesCPP::get_order(const char *symbol, long orderId, const char *ori
 	cpr::Response r = cpr::Get(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::get_order> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::get_order> Done.");
+		result = r.text;
 	}
 	else
 	{
@@ -1133,7 +943,7 @@ void BinaFuturesCPP::get_order(const char *symbol, long orderId, const char *ori
 //--------------------
 // Start user data stream (API-KEY)
 
-void BinaFuturesCPP::start_userDataStream(Json::Value &json_result)
+void BinaFuturesCPP::start_userDataStream(std::string &result)
 {
 	BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream>");
 
@@ -1150,17 +960,7 @@ void BinaFuturesCPP::start_userDataStream(Json::Value &json_result)
 	cpr::Response r = cpr::Post(cpr::Url{url_}, cpr::Header{{"X-MBX-APIKEY", api_key_}});
 	if (r.text.size() > 0)
 	{
-		try
-		{
-			Json::Reader reader;
-			json_result.clear();
-			reader.parse(r.text, json_result);
-		}
-		catch (exception &e)
-		{
-			BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream> Error ! %s", e.what());
-		}
-		BinaCPP_logger::write_log("<BinaFuturesCPP::start_userDataStream> Done.");
+		result = r.text;
 	}
 	else
 	{
