@@ -30,7 +30,6 @@ ELSE (GNUCC)
 				comunicationkeylib
 				)
 	ENDIF()
-
 	TARGET_LINK_LIBRARIES(ParserCTP ${LIBS})
 ENDIF()
 

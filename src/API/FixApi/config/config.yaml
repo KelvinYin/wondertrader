@@ -3,14 +3,36 @@ config:
     commodity: ./common/stk_comms.json
     contract: ./common/stocks.json
     risk: false
-    profile: ddTest
-    trader: TraderDD.dll
+    profile: fixTest
+    platform_settings:
+        windows:
+            path_separator: "\\"
+            socket_impl: "winsock"
+        linux:
+            path_separator: "/"
+            socket_impl: "posix"
+        macos:
+            path_separator: "/"
+            socket_impl: "posix"
 
-ddTest:
-    front: '58.210.86.54@38000'  # IP地址
-    commuser: 'MA28J1AM8'  # 通讯账户
-    commpass: '000000'  # 通讯密码
-    user: '010000000041'  # 用户账户
-    pass: '123123'  # 密码 
-    node: 'PC;IIP=NA;IPORT=NA;LIP=192.168.110.103;MAC=2CF05D3E58F6;HD=40BD9941;TYPE=TDRJYR'
-    
+fixTest:
+    BeginString: "FIXT.1.1"  # FIX传输协议版本
+    DefaultApplVerID: "FIX.5.0"  # FIX应用层版本
+    SenderCompID: "CLIENT1"  # 发送方标识
+    TargetCompID: "BROKER"  # 接收方标识
+    HeartBtInt: 30  # 心跳间隔（秒）
+    ResetSeqNumFlag: true  # 是否重置序号标志
+    DataDictionary: "./config/FIX42.xml"  # 数据字典文件路径
+    StartTime: "09:00:00"  # 交易时段开始时间
+    EndTime: "15:00:00"  # 交易时段结束时间
+    SocketConnectHost: "127.0.0.1"  # 连接地址
+    SocketConnectPort: 5001  # 连接端口
+    Username: "testuser"  # 用户名
+    Password: "testpass"  # 密码
+    LogonTimeout: 10  # 登录超时时间（秒）
+    ReconnectInterval: 30  # 重连间隔（秒）
+    SendBufferSize: 512  # 发送缓冲区大小（KB）
+    ReceiveBufferSize: 512  # 接收缓冲区大小（KB）
+    ValidateFieldsOutOfOrder: false  # 是否校验字段顺序
+    ValidateFieldsHaveValues: true  # 是否校验字段值
+    ValidateUserDefinedFields: false  # 是否校验用户自定义字段

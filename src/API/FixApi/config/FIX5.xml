@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fix major="5" minor="0">
+  <header>
+    <field name="BeginString" required="Y"/>
+    <field name="BodyLength" required="Y"/>
+    <field name="MsgType" required="Y"/>
+    <field name="SenderCompID" required="Y"/>
+    <field name="TargetCompID" required="Y"/>
+    <field name="MsgSeqNum" required="Y"/>
+    <field name="SendingTime" required="Y"/>
+  </header>
+  <trailer>
+    <field name="CheckSum" required="Y"/>
+  </trailer>
+  <messages>
+    <message name="Heartbeat" msgtype="0" msgcat="admin">
+      <field name="TestReqID" required="N"/>
+    </message>
+    <message name="TestRequest" msgtype="1" msgcat="admin">
+      <field name="TestReqID" required="Y"/>
+    </message>
+    <message name="ResendRequest" msgtype="2" msgcat="admin">
+      <field name="BeginSeqNo" required="Y"/>
+      <field name="EndSeqNo" required="Y"/>
+    </message>
+    <message name="Reject" msgtype="3" msgcat="admin">
+      <field name="RefSeqNum" required="Y"/>
+      <field name="RefMsgType" required="N"/>
+      <field name="Text" required="N"/>
+    </message>
+    <message name="SequenceReset" msgtype="4" msgcat="admin">
+      <field name="GapFillFlag" required="N"/>
+      <field name="NewSeqNo" required="Y"/>
+    </message>
+    <message name="Logout" msgtype="5" msgcat="admin">
+      <field name="Text" required="N"/>
+    </message>
+    <message name="Logon" msgtype="A" msgcat="admin">
+      <field name="EncryptMethod" required="Y"/>
+      <field name="HeartBtInt" required="Y"/>
+      <field name="ResetSeqNumFlag" required="N"/>
+      <field name="Username" required="N"/>
+      <field name="Password" required="N"/>
+    </message>
+    <message name="NewOrderSingle" msgtype="D" msgcat="app">
+      <field name="ClOrdID" required="Y"/>
+      <field name="HandlInst" required="Y"/>
+      <field name="Symbol" required="Y"/>
+      <field name="Side" required="Y"/>
+      <field name="TransactTime" required="Y"/>
+      <field name="OrderQty" required="Y"/>
+      <field name="OrdType" required="Y"/>
+      <field name="Price" required="N"/>
+      <field name="TimeInForce" required="N"/>
+      <field name="Text" required="N"/>
+    </message>
+    <message name="ExecutionReport" msgtype="8" msgcat="app">
+      <field name="OrderID" required="Y"/>
+      <field name="ClOrdID" required="Y"/>
+      <field name="ExecID" required="Y"/>
+      <field name="ExecType" required="Y"/>
+      <field name="OrdStatus" required="Y"/>
+      <field name="Symbol" required="Y"/>
+      <field name="Side" required="Y"/>
+      <field name="LeavesQty" required="Y"/>
+      <field name="CumQty" required="Y"/>
+      <field name="AvgPx" required="Y"/>
+    </message>
+  </messages>
+  <fields>
+    <field number="1" name="Account" type="STRING"/>
+    <field number="6" name="AvgPx" type="PRICE"/>
+    <field number="7" name="BeginSeqNo" type="INT"/>
+    <field number="8" name="BeginString" type="STRING"/>
+    <field number="9" name="BodyLength" type="INT"/>
+    <field number="10" name="CheckSum" type="STRING"/>
+    <field number="11" name="ClOrdID" type="STRING"/>
+    <field number="14" name="CumQty" type="QTY"/>
+    <field number="16" name="EndSeqNo" type="INT"/>
+    <field number="17" name="ExecID" type="STRING"/>
+    <field number="20" name="ExecTransType" type="CHAR">
+      <value enum="0" description="NEW"/>
+      <value enum="1" description="CANCEL"/>
+      <value enum="2" description="CORRECT"/>
+      <value enum="3" description="STATUS"/>
+    </field>
+    <field number="21" name="HandlInst" type="CHAR">
+      <value enum="1" description="AUTOMATED_EXECUTION_ORDER_PRIVATE"/>
+      <value enum="2" description="AUTOMATED_EXECUTION_ORDER_PUBLIC"/>
+      <value enum="3" description="MANUAL_ORDER"/>
+    </field>
+    <field number="34" name="MsgSeqNum" type="INT"/>
+    <field number="35" name="MsgType" type="STRING">
+      <value enum="0" description="HEARTBEAT"/>
+      <value enum="1" description="TEST_REQUEST"/>
+      <value enum="2" description="RESEND_REQUEST"/>
+      <value enum="3" description="REJECT"/>
+      <value enum="4" description="SEQUENCE_RESET"/>
+      <value enum="5" description="LOGOUT"/>
+      <value enum="8" description="EXECUTION_REPORT"/>
+      <value enum="A" description="LOGON"/>
+      <value enum="D" description="NEW_ORDER_SINGLE"/>
+    </field>
+    <field number="37" name="OrderID" type="STRING"/>
+    <field number="38" name="OrderQty" type="QTY"/>
+    <field number="39" name="OrdStatus" type="CHAR">
+      <value enum="0" description="NEW"/>
+      <value enum="1" description="PARTIALLY_FILLED"/>
+      <value enum="2" description="FILLED"/>
+      <value enum="4" description="CANCELED"/>
+      <value enum="8" description="REJECTED"/>
+    </field>
+    <field number="40" name="OrdType" type="CHAR">
+      <value enum="1" description="MARKET"/>
+      <value enum="2" description="LIMIT"/>
+      <value enum="3" description="STOP"/>
+      <value enum="4" description="STOP_LIMIT"/>
+    </field>
+    <field number="44" name="Price" type="PRICE"/>
+    <field number="49" name="SenderCompID" type="STRING"/>
+    <field number="52" name="SendingTime" type="UTCTIMESTAMP"/>
+    <field number="54" name="Side" type="CHAR">
+      <value enum="1" description="BUY"/>
+      <value enum="2" description="SELL"/>
+      <value enum="3" description="BUY_MINUS"/>
+      <value enum="4" description="SELL_PLUS"/>
+      <value enum="5" description="SELL_SHORT"/>
+      <value enum="6" description="SELL_SHORT_EXEMPT"/>
+    </field>
+    <field number="55" name="Symbol" type="STRING"/>
+    <field number="56" name="TargetCompID" type="STRING"/>
+    <field number="58" name="Text" type="STRING"/>
+    <field number="59" name="TimeInForce" type="CHAR">
+      <value enum="0" description="DAY"/>
+      <value enum="1" description="GOOD_TILL_CANCEL"/>
+      <value enum="3" description="IMMEDIATE_OR_CANCEL"/>
+      <value enum="4" description="FILL_OR_KILL"/>
+    </field>
+    <field number="60" name="TransactTime" type="UTCTIMESTAMP"/>
+    <field number="98" name="EncryptMethod" type="INT">
+      <value enum="0" description="NONE"/>
+      <value enum="1" description="PKCS"/>
+      <value enum="2" description="DES"/>
+      <value enum="3" description="PKCS_DES"/>
+      <value enum="4" description="PGP_DES"/>
+      <value enum="5" description="PGP_DES_MD5"/>
+      <value enum="6" description="PEM_DES_MD5"/>
+    </field>
+    <field number="108" name="HeartBtInt" type="INT"/>
+    <field number="112" name="TestReqID" type="STRING"/>
+    <field number="122" name="OrigSendingTime" type="UTCTIMESTAMP"/>
+    <field number="123" name="GapFillFlag" type="BOOLEAN"/>
+    <field number="141" name="ResetSeqNumFlag" type="BOOLEAN"/>
+    <field number="150" name="ExecType" type="CHAR">
+      <value enum="0" description="NEW"/>
+      <value enum="4" description="CANCELED"/>
+      <value enum="5" description="REPLACED"/>
+      <value enum="8" description="REJECTED"/>
+      <value enum="F" description="TRADE"/>
+    </field>
+    <field number="151" name="LeavesQty" type="QTY"/>
+    <field number="553" name="Username" type="STRING"/>
+    <field number="554" name="Password" type="STRING"/>
+  </fields>
+</fix>

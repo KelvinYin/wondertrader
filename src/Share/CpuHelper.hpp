@@ -1,9 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <thread>
 #ifdef __APPLE__
 #include <mach/mach.h>
 #endif
-
 class CpuHelper
 {
 public:
