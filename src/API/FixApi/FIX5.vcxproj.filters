@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WtFixApiBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WtFixMsgCodec.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WtFixMsgHandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WtFixQuoteApi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WtFixSessionMgr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WtFixTraderApi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IFixMsgFilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IFixMsgHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WtFixApiBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WtFixMsgCodec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WtFixMsgHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WtFixQuoteApi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WtFixSessionMgr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WtFixTraderApi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fiddef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

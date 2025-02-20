@@ -1,0 +1,55 @@
+#1. 确定CMake的最低版本需求
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
+
+#2. 确定工程名
+PROJECT(FIX5 LANGUAGES CXX)
+SET(CMAKE_CXX_STANDARD 17)
+
+#3. 设置输出目录
+SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/build_${PLATFORM}/${CMAKE_BUILD_TYPE}/bin)
+
+#4. 设置源文件
+SET(SRC  
+    ${PROJECT_SOURCE_DIR}/ParseFIX.cpp
+    ${PROJECT_SOURCE_DIR}/ParseFIX.h
+    ${PROJECT_SOURCE_DIR}/WtFixApiBase.cpp
+    ${PROJECT_SOURCE_DIR}/WtFixApiBase.h
+    ${PROJECT_SOURCE_DIR}/WtFixMsgCodec.cpp
+    ${PROJECT_SOURCE_DIR}/WtFixMsgCodec.h
+    ${PROJECT_SOURCE_DIR}/WtFixMsgHandler.cpp
+    ${PROJECT_SOURCE_DIR}/WtFixMsgHandler.h
+    ${PROJECT_SOURCE_DIR}/WtFixQuoteApi.cpp
+    ${PROJECT_SOURCE_DIR}/WtFixQuoteApi.h
+    ${PROJECT_SOURCE_DIR}/WtFixSessionMgr.cpp
+    ${PROJECT_SOURCE_DIR}/WtFixSessionMgr.h
+    ${PROJECT_SOURCE_DIR}/WtFixTraderApi.cpp
+    ${PROJECT_SOURCE_DIR}/WtFixTraderApi.h
+)
+
+#5. 添加头文件和库文件目录
+INCLUDE_DIRECTORIES(${INCS})
+LINK_DIRECTORIES(${LNKS})
+
+#6. 生成动态库
+ADD_LIBRARY(FIX5 SHARED ${SRC})
+
+#7. 链接依赖库
+IF(MSVC)
+ELSE(GNUCC)
+    SET(LIBS
+        boost_thread
+        boost_filesystem
+        dl
+    )
+    TARGET_LINK_LIBRARIES(FIX5 ${LIBS})
+ENDIF()
+
+#8. 设置编译选项
+IF (MSVC)
+ELSE (GNUCC)
+    SET_TARGET_PROPERTIES(FIX5 PROPERTIES
+        CXX_VISIBILITY_PRESET hidden
+        C_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN 1
+        LINK_FLAGS_RELEASE -s)
+ENDIF ()

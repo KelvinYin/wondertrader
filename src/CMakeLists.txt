@@ -1,103 +1,119 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
 
-PROJECT(WonderTrader)
+PROJECT(WonderTrader LANGUAGES CXX)
 
-#3. 环境判断
+# 设置C++标准
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_EXTENSIONS OFF)
+
+# 设置构建类型
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE Release)
+ENDIF()
+
+# 环境判断
 IF (WIN32)
-	MESSAGE(STATUS "Operation System is windows")
+    MESSAGE(STATUS "Operation System is Windows")
+ELSEIF (APPLE)
+    MESSAGE(STATUS "Operation System is macOS")
 ELSEIF (UNIX)
-	MESSAGE(STATUS "Operation System is UNIX-like OS's")
+    MESSAGE(STATUS "Operation System is UNIX-like OS")
 ENDIF ()
 
 MESSAGE(STATUS "Generator is ${CMAKE_GENERATOR}")
+MESSAGE(STATUS "Build Type is ${CMAKE_BUILD_TYPE}")
 
+# 编译器和平台相关配置
 IF (MSVC)
-	ADD_DEFINITIONS (-D_CRT_SECURE_NO_WARNINGS)
-	IF(CMAKE_CL_64)
-		SET(INCS $ENV{MyDepends141}/include)
-		SET(LNKS $ENV{MyDepends141}/lib/x64)
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+    IF(CMAKE_CL_64)
+        SET(INCS $ENV{MyDepends141}/include)
+        SET(LNKS $ENV{MyDepends141}/lib/x64)
+        SET(PLATFORM x64)
+        MESSAGE(STATUS "Platform is x64")
+    ELSE()
+        SET(INCS $ENV{MyDepends141}/include)
+        SET(LNKS $ENV{MyDepends141}/lib/x86)
+        SET(PLATFORM x86)
+        MESSAGE(STATUS "Platform is x86")
+    ENDIF()
+    SET(PREFIX )
+    SET(SUFFIX .dll)
+    MESSAGE(STATUS "MyDepends is at $ENV{MyDepends141}")
+ELSE()
+    IF(WIN32)
+        SET(MyDeps $ENV{MyDependsGcc})
+        SET(SUFFIX .dll)
+        MESSAGE(STATUS "MyDepends is at $ENV{MyDependsGcc}")
+    ELSEIF(APPLE)
+        SET(MyDeps "/usr/local/mydeps")
+        SET(SUFFIX .dylib)
+        MESSAGE(STATUS "MyDepends is at /usr/local/mydeps")
+    ELSE()
+        SET(MyDeps "/usr/local/mydeps")
+        SET(SUFFIX .so)
+        MESSAGE(STATUS "MyDepends is at /usr/local/mydeps")
+    ENDIF()
 
-		MESSAGE(STATUS "MyDepends is at $ENV{MyDepends141}")
-		MESSAGE(STATUS "Platform is x64")
-		SET(PLATFORM x64)
-	ELSE()
-		SET(INCS $ENV{MyDepends141}/include)
-		SET(LNKS $ENV{MyDepends141}/lib/x86)
-
-		MESSAGE(STATUS "MyDepends is at $ENV{MyDepends141}")
-		MESSAGE(STATUS "Platform is x86")
-		SET(PLATFORM x86)
-	ENDIF()
-	SET(PREFIX )
-	SET(SUFFIX .dll)
-ELSE (GNUCC)
-	IF(WIN32)
-		SET (MyDeps $ENV{MyDependsGcc})
-		SET(SUFFIX .dll)
-
-		MESSAGE(STATUS "MyDepends is at $ENV{MyDependsGcc}")
-	ELSEIF(APPLE)
-		SET (MyDeps "~/mydeps")
-		SET(SUFFIX .dylib)
-
-		MESSAGE(STATUS "MyDepends is at ~/mydeps")
-	ELSE(UNIX)
-		SET (MyDeps "/home/mydeps")
-		SET(SUFFIX .so)
-
-		MESSAGE(STATUS "MyDepends is at /home/mydeps")
-	ENDIF()
-
-	SET(INCS ${MyDeps}/include)
-	SET(LNKS ${MyDeps}/lib)
-
-	MESSAGE(STATUS "Platform is x64")
-	SET(PLATFORM x64)
-	SET(PREFIX lib)
+    SET(INCS ${MyDeps}/include)
+    SET(LNKS ${MyDeps}/lib)
+    SET(PLATFORM x64)
+    SET(PREFIX lib)
+    
+    # GCC/Clang特定选项
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+    IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+        SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+    ENDIF()
 ENDIF()
 
-SET(CMAKE_CXX_STANDARD 17)
+# 设置输出目录
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build_${PLATFORM}/${CMAKE_BUILD_TYPE}/bin)
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build_${PLATFORM}/${CMAKE_BUILD_TYPE}/bin)
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build_${PLATFORM}/${CMAKE_BUILD_TYPE}/libs)
 
-#basic libraries
+# 基础库
 ADD_SUBDIRECTORY(WTSUtils)
 ADD_SUBDIRECTORY(WTSTools)
 
-#contract Loade through ctp channel
+# CTP相关模块
 ADD_SUBDIRECTORY(CTPLoader)
 ADD_SUBDIRECTORY(CTPOptLoader)
-ADD_SUBDIRECTORY(MiniLoader)
 ADD_SUBDIRECTORY(LoaderRunner)
-
-#parser for quote date from ctp channel
 ADD_SUBDIRECTORY(ParserCTP)
 ADD_SUBDIRECTORY(ParserCTPMini)
 ADD_SUBDIRECTORY(ParserCTPOpt)
+ADD_SUBDIRECTORY(TraderCTP)
+ADD_SUBDIRECTORY(TraderCTPMini)
+ADD_SUBDIRECTORY(TraderCTPOpt)
+
+# 其他交易接口
 ADD_SUBDIRECTORY(ParserFemas)
 ADD_SUBDIRECTORY(ParserXTP)
+ADD_SUBDIRECTORY(ParserShm)
 ADD_SUBDIRECTORY(ParserXeleSkt)
+ADD_SUBDIRECTORY(ParserUDP)
+ADD_SUBDIRECTORY(TraderFemas)
+ADD_SUBDIRECTORY(TraderMocker)
+ADD_SUBDIRECTORY(TraderXTP)
+ADD_SUBDIRECTORY(TraderYD)
+
+# 数据存储和处理
 ADD_SUBDIRECTORY(WtDataStorage)
 ADD_SUBDIRECTORY(WtDataStorageAD)
 ADD_SUBDIRECTORY(WtDtCore)
 ADD_SUBDIRECTORY(WtDtHelper)
 ADD_SUBDIRECTORY(WtDtPorter)
 ADD_SUBDIRECTORY(WtDtServo)
-#quote date processor
 ADD_SUBDIRECTORY(QuoteFactory)
 
-#back test core library
+# 回测系统
 ADD_SUBDIRECTORY(WtBtCore)
-#back test c porter for outter libraries
 ADD_SUBDIRECTORY(WtBtPorter)
 ADD_SUBDIRECTORY(WtBtRunner)
 
-ADD_SUBDIRECTORY(ParserUDP)
-ADD_SUBDIRECTORY(TraderCTP)
-ADD_SUBDIRECTORY(TraderCTPMini)
-ADD_SUBDIRECTORY(TraderCTPOpt)
-ADD_SUBDIRECTORY(TraderFemas)
-ADD_SUBDIRECTORY(TraderMocker)
-ADD_SUBDIRECTORY(TraderXTP)
-ADD_SUBDIRECTORY(TraderYD)
+# 核心组件
 ADD_SUBDIRECTORY(WtExeFact)
 ADD_SUBDIRECTORY(WtRiskMonFact)
 
@@ -107,11 +123,12 @@ ADD_SUBDIRECTORY(WtPorter)
 ADD_SUBDIRECTORY(WtExecMon)
 ADD_SUBDIRECTORY(WtRunner)
 
+# 工具组件
 ADD_SUBDIRECTORY(TraderDumper)
 
 ADD_SUBDIRECTORY(WtShareHelper)
 
-#uft
+# UFT模块
 ADD_SUBDIRECTORY(WtUftCore)
 ADD_SUBDIRECTORY(WtUftStraFact)
 ADD_SUBDIRECTORY(WtUftRunner)
@@ -119,7 +136,7 @@ ADD_SUBDIRECTORY(WtUftRunner)
 ADD_SUBDIRECTORY(WtLatencyHFT)
 ADD_SUBDIRECTORY(WtLatencyUFT)
 
-#test projects
+# 测试项目
 ADD_SUBDIRECTORY(TestBtPorter)
 ADD_SUBDIRECTORY(TestDtPorter)
 ADD_SUBDIRECTORY(TestExecPorter)
